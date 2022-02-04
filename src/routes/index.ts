@@ -1,16 +1,15 @@
 import { Router } from 'express';
-import { getAllUsers, addOneUser, updateOneUser, deleteOneUser } from './Users';
 
+
+import {add as voteAdd} from '../controller/vote/add'
 
 // User-route
-const userRouter = Router();
-userRouter.get('/all', getAllUsers);
-userRouter.post('/add', addOneUser);
-userRouter.put('/update', updateOneUser);
-userRouter.delete('/delete/:id', deleteOneUser);
+const voteRouter = Router();
+voteRouter.post('/vote', voteAdd);
+
 
 
 // Export the base-router
 const baseRouter = Router();
-baseRouter.use('/users', userRouter);
+baseRouter.use('/', voteRouter);
 export default baseRouter;
