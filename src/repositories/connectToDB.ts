@@ -1,0 +1,32 @@
+import { MongoClient, Db } from "mongodb";
+import { secrets } from "../utils/secrets";
+
+const url = `mongodb://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}@wwts_db:27017/wwts`;
+
+export var db: Db;
+
+export const connectToDB = async () => {
+  const client = new MongoClient(url, {});
+  try {
+    await client.connect();
+    db = client.db("stududu");
+    prepareDatabase();
+    console.log("Connected to database!");
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const getCollection = (name: string) => {
+  return db.collection(name);
+};
+
+async function prepareDatabase() {
+  try {
+    const collection = getCollection("vote");
+    collection.createIndex({ token: 1, ballot: 1 }, { unique: true });
+  } catch (err) {
+    console.log(err);
+    return { message: "Error while saving User" };
+  }
+}
