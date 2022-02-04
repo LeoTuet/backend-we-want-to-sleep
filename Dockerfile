@@ -15,7 +15,6 @@ RUN rm -f .npmrc
 
 # Copy source
 COPY src ./src
-COPY public ./public
 COPY tsconfig.json ./tsconfig.json
 
 # Build dist
