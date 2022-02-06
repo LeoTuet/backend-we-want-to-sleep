@@ -9,7 +9,8 @@ export class VoteService {
     VoteRepository.addVote(
       token,
       (await BallotRepository.getBallot(ballotID))._id,
-      vote
+      vote,
+      new Date()
     )
   }
 

@@ -3,12 +3,12 @@ import {Vote} from "./schemas";
 import {ObjectId} from "mongodb";
 
 export default {
-  addVote(token: string, ballotID: ObjectId, vote: string) {
+  addVote(token: string, ballotID: ObjectId, vote: string, votedAt: Date) {
     getCollection("vote").insertOne({
       token,
       ballotID,
       vote,
-      votedAt: new Date()
+      votedAt: votedAt
     })
   },
 
