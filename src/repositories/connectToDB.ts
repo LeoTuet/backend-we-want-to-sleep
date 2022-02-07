@@ -9,7 +9,7 @@ export const connectToDB = async () => {
   const client = new MongoClient(url, {});
   try {
     await client.connect();
-    db = client.db("stududu");
+    db = client.db("wwts");
     prepareDatabase();
     console.log("Connected to database!");
   } catch (e) {
