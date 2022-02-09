@@ -1,10 +1,11 @@
 import createError from "http-errors";
+import { VotingOption } from "../repositories/schemas";
 import { BallotService } from "../services/BallotService";
 
 const ballotService = new BallotService();
 
 export class BallotHandler {
-  public async addBallot(running: boolean, options: string[]) {
+  public async addBallot(running: boolean, options: VotingOption[]) {
     if (options.length < 2) throw createError(422, "Not enough vote options");
     await ballotService.addBallot(running, options);
   }
