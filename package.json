@@ -7,7 +7,8 @@
     "start": "node ./dist",
     "start:dev": "nodemon",
     "test": "nodemon --config ./spec/nodemon.json",
-    "test:no-reloading": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./spec"
+    "test:no-reloading": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./spec",
+     "tsc:errors": "tsc -p ."
   },
   "nodemonConfig": {
     "watch": [
@@ -69,6 +70,7 @@
     "http-errors": "^1.8.1",
     "http-status-codes": "^2.2.0",
     "jet-logger": "^1.1.5",
+    "joi": "^17.6.0",
     "jsonfile": "^6.1.0",
     "module-alias": "^2.2.2",
     "mongodb": "^4.3.1",
@@ -77,7 +79,6 @@
     "node-fetch": "^2.0.0"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.0.3",
     "@types/command-line-args": "^5.2.0",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.2",
@@ -89,6 +90,7 @@
     "@types/jsonfile": "^6.0.1",
     "@types/morgan": "^1.9.3",
     "@types/node": "^17.0.14",
+    "@types/node-fetch": "^2.0.3",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.10.2",
     "@typescript-eslint/parser": "^5.10.2",
