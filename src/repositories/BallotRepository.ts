@@ -1,14 +1,14 @@
 import { getCollection } from "./connectToDB";
-import { Ballot } from "./schemas";
+import { Ballot, VotingOption } from "./schemas";
 import { ObjectId } from "mongodb";
 import createHttpError from "http-errors";
 
 export default {
-  addBallot(running: boolean, options: string[]) {
-    getCollection("ballot").insertOne({ running, options });
+  async addBallot(running: boolean, options: VotingOption[]) {
+    await getCollection("ballot").insertOne({ running, options });
   },
 
-  deleteBallot(ballotID: string) {
+  async deleteBallot(ballotID: string) {
     getCollection("ballot").deleteOne({ _id: new ObjectId(ballotID) });
   },
 
