@@ -2,7 +2,7 @@ import {NextFunction, Request} from "express";
 import {Forbidden, Unauthorized} from "http-errors";
 import JWTs from "./JWTs";
 import {asyncHandler} from "./AsyncHandler";
-import {JwtPayload} from "jsonwebtoken";
+import {JwtPayload, TokenExpiredError} from "jsonwebtoken";
 import {AdminService} from "../services/AdminService";
 
 const adminService = new AdminService()
@@ -19,10 +19,14 @@ export const isAdmin = asyncHandler(async (req: Request<{}, {}, {}>, res, next: 
 
   try {
     decodedJwt = JWTs.verifyAndDecodeAccessToken(jwt)
-  } catch {
-    throw new Unauthorized("AccessToken expired")
+  } catch (e) {
+    if (e instanceof TokenExpiredError) {
+      throw new Unauthorized("AccessToken expired")
+    } else {
+      throw new Unauthorized("AccessToken invalid")
+    }
   }
-
+  console.log(decodedJwt)
   if (!await adminService.checkIfUsernameExists(decodedJwt.payload.username))
     throw new Forbidden()
 
