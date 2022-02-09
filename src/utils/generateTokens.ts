@@ -2,7 +2,6 @@ import { customAlphabet } from "nanoid";
 const nanoid = customAlphabet("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", 12);
 
 export const generateTokens = (count: number): string[] => {
-  console.info("Test");
   return new Array(count)
     .fill("")
     .map(() => nanoid())
