@@ -1,0 +1,16 @@
+name: Pull Request build verification
+on:
+  pull_request:
+    types: [ opened, reopened, edited ]
+
+env:
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag ${{ env.IMAGE_NAME }}:$(date +%s)
+
