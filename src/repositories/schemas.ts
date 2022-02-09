@@ -25,3 +25,8 @@ export interface VotingOption {
   identifier: string;
   label: string;
 }
+
+export interface Admin {
+  username: string;
+  passwordHash: string;
+}

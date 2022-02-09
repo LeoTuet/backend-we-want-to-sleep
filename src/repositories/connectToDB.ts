@@ -1,5 +1,4 @@
 import { MongoClient, Db } from "mongodb";
-import { secrets } from "../utils/secrets";
 
 const url = `mongodb://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}@wwts_db:27017/wwts`;
 
@@ -25,6 +24,7 @@ async function prepareDatabase() {
   try {
     await getCollection("vote").createIndex({ token: 1, ballot: 1 }, { unique: true });
     await getCollection("token").createIndex({ token: 1 }, { unique: true });
+    await getCollection("admin").createIndex({ username: 1 }, { unique: true });
   } catch (err) {
     console.log(err);
     return { message: "Error while saving User" };
