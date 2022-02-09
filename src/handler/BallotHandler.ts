@@ -1,7 +1,7 @@
 import createError from "http-errors";
-import {BallotService} from "../services/BallotService";
+import { BallotService } from "../services/BallotService";
 
-const ballotService = new BallotService()
+const ballotService = new BallotService();
 
 export class BallotHandler {
   public async addBallot(running: boolean, options: string[]) {

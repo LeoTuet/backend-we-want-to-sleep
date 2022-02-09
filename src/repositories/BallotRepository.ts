@@ -1,6 +1,7 @@
 import { getCollection } from "./connectToDB";
 import { Ballot } from "./schemas";
 import { ObjectId } from "mongodb";
+import createHttpError from "http-errors";
 
 export default {
   addBallot(running: boolean, options: string[]) {
@@ -22,6 +23,12 @@ export default {
   },
 
   async getRunningBallot(): Promise<Ballot> {
-    return await getCollection<Ballot>("ballot").findOne({ running: true });
+    const ballot = await getCollection<Ballot>("ballot").findOne({
+      running: true,
+    });
+    if (!ballot) {
+      throw new createHttpError.NotFound();
+    }
+    return ballot;
   },
 };
