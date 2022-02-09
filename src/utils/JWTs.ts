@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import {secrets} from "./secrets";
 
-const JWTSecret = secrets.JWTSecret || "test"
+const JWTSecret = secrets.JWTSecret
 
 export default {
   verifyAccessToken(token: string): boolean {

@@ -26,7 +26,6 @@ export const isAdmin = asyncHandler(async (req: Request<{}, {}, {}>, res, next: 
       throw new Unauthorized("AccessToken invalid")
     }
   }
-  console.log(decodedJwt)
   if (!await adminService.checkIfUsernameExists(decodedJwt.payload.username))
     throw new Forbidden()
 
