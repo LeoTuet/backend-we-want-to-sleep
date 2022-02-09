@@ -1,17 +1,17 @@
 import BallotRepository from "../repositories/BallotRepository";
 
 export class BallotService {
-  public addBallot = BallotRepository.addBallot
+  public addBallot = BallotRepository.addBallot;
 
-  public getBallots = BallotRepository.getBallots
+  public getBallots = BallotRepository.getBallots;
 
-  public getBallot = BallotRepository.getBallot
+  public getBallot = BallotRepository.getBallot;
 
-  public deleteBallot = BallotRepository.deleteBallot
+  public deleteBallot = BallotRepository.deleteBallot;
 
-  public getRunningBallots = BallotRepository.getRunningBallots
+  public getRunningBallot = BallotRepository.getRunningBallot;
 
   public async checkIfBallotIDExists(ballotID: string): Promise<boolean> {
-    return (await this.getBallot(ballotID)) != null
+    return (await this.getBallot(ballotID)) != null;
   }
 }
