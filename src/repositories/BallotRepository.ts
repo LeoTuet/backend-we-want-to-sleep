@@ -23,12 +23,8 @@ export default {
   },
 
   async getRunningBallot(): Promise<Ballot> {
-    const ballot = await getCollection<Ballot>("ballot").findOne({
+    return await getCollection<Ballot>("ballot").findOne({
       running: true,
     });
-    if (!ballot) {
-      throw new createHttpError.NotFound();
-    }
-    return ballot;
   },
 };
