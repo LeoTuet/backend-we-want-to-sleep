@@ -1,7 +1,7 @@
 name: Pull Request build verification
 on:
   pull_request:
-    types: [ opened, reopened, edited ]
+    types: [ opened, reopened, edited, synchronize ]
 
 env:
   PR_NUMBER: $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
