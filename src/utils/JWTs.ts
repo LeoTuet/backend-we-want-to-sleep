@@ -20,6 +20,6 @@ export default {
 
 
   generateAccessToken(username: string): string {
-    return jwt.sign({username}, JWTSecret, {expiresIn: "3h"})
+    return jwt.sign({username}, JWTSecret, {expiresIn: "1h"})
   }
 }

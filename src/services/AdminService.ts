@@ -7,7 +7,7 @@ export class AdminService {
   public async addAdmin(username: string, password: string) {
     AdminRepository.addAdmin(
       username,
-      await hash(password, 10)
+      await hash(password, 12)
     )
   };
 
