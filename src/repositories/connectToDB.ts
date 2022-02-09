@@ -9,7 +9,7 @@ export const connectToDB = async () => {
   const client = new MongoClient(url, {});
   try {
     await client.connect();
-    db = client.db("stududu");
+    db = client.db("wwts");
     prepareDatabase();
     console.log("Connected to database!");
   } catch (e) {
@@ -17,14 +17,14 @@ export const connectToDB = async () => {
   }
 };
 
-export const getCollection = (name: string) => {
-  return db.collection(name);
+export const getCollection = <Type = any>(name: string) => {
+  return db.collection<Type>(name);
 };
 
 async function prepareDatabase() {
   try {
-    const collection = getCollection("vote");
-    collection.createIndex({ token: 1, ballot: 1 }, { unique: true });
+    await getCollection("vote").createIndex({ token: 1, ballot: 1 }, { unique: true });
+    await getCollection("token").createIndex({ token: 1 }, { unique: true });
   } catch (err) {
     console.log(err);
     return { message: "Error while saving User" };
