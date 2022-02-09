@@ -1,4 +1,5 @@
 import { MongoClient, Db } from "mongodb";
+import { secrets } from "../utils/secrets";
 
 const url = `mongodb://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}@wwts_db:27017/wwts`;
 
