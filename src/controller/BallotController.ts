@@ -1,15 +1,15 @@
-import {Request} from "express";
-import {asyncHandler} from "../utils/AsyncHandler";
-import {BallotHandler} from "../handler/BallotHandler";
+import { Request } from "express";
+import { asyncHandler } from "../utils/AsyncHandler";
+import { BallotHandler } from "../handler/BallotHandler";
 
-const ballotHandler = new BallotHandler()
+const ballotHandler = new BallotHandler();
 
 export default {
   list: asyncHandler(async (req: Request<{}, {}, {}>, res, next) => {
-    res.json(await ballotHandler.getBallots());
+    res.json({ data: await ballotHandler.getBallots() });
   }),
 
   listRunning: asyncHandler(async (req: Request<{}, {}, {}>, res, next) => {
-    res.json(await ballotHandler.getRunningBallots());
-  })
-}
+    res.json({ data: await ballotHandler.getRunningBallot() });
+  }),
+};
