@@ -4,7 +4,7 @@ on:
     types: [ opened, reopened, edited ]
 
 env:
-  IMAGE_NAME: ${{ github.repository }}
+  PR_NUMBER: $(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
 
 jobs:
   build:
@@ -12,5 +12,5 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ${{ env.IMAGE_NAME }}:$(date +%s)
+        run: docker build . --file Dockerfile --tag wwts-backend-pr:${{env.PR_NUMBER}} --build-arg ${{ secrets.NPM_TOKEN }}
 
