@@ -27,6 +27,7 @@ export interface VotingOption {
 }
 
 export interface Admin {
+  _id: string;
   username: string;
   passwordHash: string;
 }

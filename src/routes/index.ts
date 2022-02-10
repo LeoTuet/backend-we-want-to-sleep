@@ -21,6 +21,8 @@ tokenRouter.get("/status/:ballotID/:token", TokenController.getStatus);
 
 const adminRouter = Router();
 adminRouter.post("/login", AdminController.login);
+adminRouter.post("/", isAdmin, AdminController.add);
+adminRouter.delete("/", isAdmin, AdminController.delete);
 
 // Export the base-router
 const baseRouter = Router();
