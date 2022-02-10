@@ -33,7 +33,7 @@ export const isCaptchaValid = asyncHandler(async (req: Request<{}, {}, {}>, res,
 
 interface HCaptchaRespone {
     "error-codes": string[],
-    // brackets needed since "-" is an operator in ts and die HCaptcha API returns it like this (https://docs.hcaptcha.com/)
+    // quotes needed since "-" is an operator in ts and die HCaptcha API returns it like this (https://docs.hcaptcha.com/)
     success: boolean,
     challenge_ts: string,
     hostname: string,
