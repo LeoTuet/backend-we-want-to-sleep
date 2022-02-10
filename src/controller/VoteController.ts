@@ -36,7 +36,6 @@ export default {
         req.body.token,
         req.params.ballotID,
         req.body.vote,
-        req.headers["X-Captcha"].toString()
       );
 
       res.status(204).send();

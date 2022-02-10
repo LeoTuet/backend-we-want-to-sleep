@@ -1,11 +1,12 @@
-import { Router } from "express";
+import {Router} from "express";
 import VoteController from "../controller/VoteController";
 import BallotController from "../controller/BallotController";
 import TokenController from "../controller/TokenController";
+import {isCaptchaValid} from "../middleware/CaptchaMiddleware";
 
 // User-route
 const voteRouter = Router();
-voteRouter.post("/:ballotID", VoteController.add);
+voteRouter.post("/:ballotID", isCaptchaValid, VoteController.add);
 voteRouter.get("/:ballotID/:token", VoteController.get);
 
 const ballotRouter = Router();
