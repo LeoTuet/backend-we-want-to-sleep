@@ -3,7 +3,7 @@ import path from "path";
 
 // Default secrets directory.
 export const DOCKER_SECRET_DIR = "/run/secrets";
-export const LOCAL_SECRET_FILE = "/backend-we-want-to-sleep/.env";
+export const LOCAL_SECRET_FILE = ".env";
 
 export interface Secrets {
   [key: string]: string;

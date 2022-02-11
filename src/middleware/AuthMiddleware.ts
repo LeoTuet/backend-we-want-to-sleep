@@ -1,7 +1,7 @@
 import {NextFunction, Request} from "express";
 import {Forbidden, Unauthorized} from "http-errors";
-import JWTs from "./JWTs";
-import {asyncHandler} from "./AsyncHandler";
+import JWTs from "../utils/JWTs";
+import {asyncHandler} from "../utils/AsyncHandler";
 import {JwtPayload, TokenExpiredError} from "jsonwebtoken";
 import {AdminService} from "../services/AdminService";
 
@@ -30,6 +30,6 @@ export const isAdmin = asyncHandler(async (req: Request<{}, {}, {}>, res, next: 
     throw new Forbidden()
 
   res.locals.authenticated = true
-  res.locals.username = decodedJwt.username
+  res.locals.username = decodedJwt.payload.username
   next()
 })
