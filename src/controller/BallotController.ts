@@ -16,9 +16,9 @@ export default {
     res.json({ data: await ballotHandler.getRunningBallot() });
   }),
 
-  add: asyncHandler(async (req: Request<{}, {}, CreationBallot>, res) => {
+  add: asyncHandler(async (req: Request<{}, {}, CreationBallot, {}, {username: string}>, res) => {
     res.json({
-      data: await ballotHandler.addBallot(req.body.running, req.body.options),
+      data: await ballotHandler.addBallot(req.body.running, req.res.locals.username, req.body.question, req.body.options),
     });
   }),
 

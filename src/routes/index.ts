@@ -19,6 +19,7 @@ ballotRouter.get("/running", BallotController.listRunning);
 
 const tokenRouter = Router();
 tokenRouter.get("/status/:ballotID/:token", TokenController.getStatus);
+tokenRouter.post("/", isAdmin, TokenController.generate);
 
 const adminRouter = Router();
 adminRouter.post("/login", AdminController.login);

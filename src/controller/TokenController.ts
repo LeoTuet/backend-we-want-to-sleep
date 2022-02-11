@@ -1,7 +1,7 @@
-import { Request } from "express";
+import {Request} from "express";
 import Joi from "joi";
-import { asyncHandler } from "../utils/AsyncHandler";
-import { TokenHandler } from "../handler/TokenHandler";
+import {asyncHandler} from "../utils/AsyncHandler";
+import {TokenHandler} from "../handler/TokenHandler";
 
 const tokenHandler = new TokenHandler();
 
@@ -25,4 +25,10 @@ export default {
       });
     }
   ),
+  generate: asyncHandler(
+    async (req: Request<{}, {}, { amount: number, valid: boolean }, {}, { username: string }>, res) => {
+      res.json({
+        data: await tokenHandler.generateTokens(req.body.amount, req.body.valid, req.res.locals.username)
+      })
+    })
 };
