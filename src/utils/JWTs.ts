@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken"
 import {secrets} from "./secrets";
 
-const jwtPrivateKey = Buffer.from(secrets.JWTPrivateKey, "utf-8")
-const jwtPublicKey = Buffer.from(secrets.JWTPublicKey, "utf-8")
+const jwtPrivateKey = `-----BEGIN EC PRIVATE KEY-----\n${secrets.JWTPrivateKey}\n-----END EC PRIVATE KEY-----`
+const jwtPublicKey = `-----BEGIN PUBLIC KEY-----\n${secrets.JWTPublicKey}\n-----END PUBLIC KEY-----`
 
 const algorithm = "ES256"
 
