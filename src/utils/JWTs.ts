@@ -3,7 +3,6 @@ import {secrets} from "./secrets";
 
 const jwtPrivateKey = `-----BEGIN EC PRIVATE KEY-----\n${secrets.JWTPrivateKey}\n-----END EC PRIVATE KEY-----`
 const jwtPublicKey = `-----BEGIN PUBLIC KEY-----\n${secrets.JWTPublicKey}\n-----END PUBLIC KEY-----`
-
 const algorithm = "ES256"
 
 export default {
