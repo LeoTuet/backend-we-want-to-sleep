@@ -3,7 +3,7 @@ import VoteController from "../controller/VoteController";
 import BallotController from "../controller/BallotController";
 import TokenController from "../controller/TokenController";
 import AdminController from "../controller/AdminController";
-import {isAdmin} from "../utils/AuthMiddleware";
+import {isAdmin} from "../middleware/AuthMiddleware";
 import {isCaptchaValid} from "../middleware/CaptchaMiddleware";
 
 // User-route
