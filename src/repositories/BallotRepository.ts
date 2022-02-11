@@ -1,7 +1,6 @@
 import { getCollection } from "./connectToDB";
 import { Ballot, VotingOption } from "./schemas";
 import { ObjectId } from "mongodb";
-import createHttpError from "http-errors";
 
 export default {
   async addBallot(running: boolean, options: VotingOption[]) {
