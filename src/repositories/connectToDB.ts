@@ -25,6 +25,7 @@ async function prepareDatabase() {
   try {
     await getCollection("vote").createIndex({ token: 1, ballot: 1 }, { unique: true });
     await getCollection("token").createIndex({ token: 1 }, { unique: true });
+    await getCollection("admin").createIndex({ username: 1 }, { unique: true });
   } catch (err) {
     console.log(err);
     return { message: "Error while saving User" };
