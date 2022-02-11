@@ -5,6 +5,7 @@ import TokenController from "../controller/TokenController";
 import AdminController from "../controller/AdminController";
 import {isAdmin} from "../utils/AuthMiddleware";
 import {isCaptchaValid} from "../middleware/CaptchaMiddleware";
+import { adminLoginLimiter, defaultLimiter } from "../middleware/RateLimitMiddleware";
 
 // User-route
 const voteRouter = Router();
@@ -21,12 +22,13 @@ const tokenRouter = Router();
 tokenRouter.get("/status/:ballotID/:token", TokenController.getStatus);
 
 const adminRouter = Router();
-adminRouter.post("/login", AdminController.login);
+adminRouter.post("/login", adminLoginLimiter, AdminController.login);
 adminRouter.post("/", isAdmin, AdminController.add);
 adminRouter.delete("/", isAdmin, AdminController.delete);
 
 // Export the base-router
 const baseRouter = Router();
+baseRouter.use(defaultLimiter);
 baseRouter.use("/vote", voteRouter);
 baseRouter.use("/ballot", ballotRouter);
 baseRouter.use("/token", tokenRouter);
