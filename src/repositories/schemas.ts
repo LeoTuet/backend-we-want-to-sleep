@@ -10,7 +10,9 @@ export interface Vote {
 
 export interface Ballot {
   _id: string;
+  createdBy: string;
   running: boolean;
+  question: string;
   options: VotingOption[];
 }
 
@@ -18,6 +20,7 @@ export interface Token {
   _id: string;
   token: string;
   valid: boolean;
+  createdBy: string;
   createdAt: Date;
 }
 
