@@ -9,7 +9,7 @@ COPY .npmrc-docker ./.npmrc
 COPY package*.json ./
 
 # Install deps
-RUN npm ci --silent
+RUN npm ci
 
 RUN rm -f .npmrc
 
