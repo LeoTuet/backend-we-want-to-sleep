@@ -9,6 +9,8 @@ app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
+app.set('trust proxy', 1) // so we don't block nginx reverse proxy
+
 app.use(baseRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
