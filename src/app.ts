@@ -18,7 +18,12 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     return next(err)
   }
   return res.status(err.status).json({
-    error: err.message,
+    error: {
+      "timestamp": new Date(),
+      "status": err.statusCode,
+      "error": err.name,
+      "message": err.message
+    },
   });
 });
 
@@ -29,7 +34,12 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
   console.error(err)
   return res.status(500).json({
-    error: err,
+    error: {
+      "timestamp": new Date(),
+      "status": 500,
+      "error": "InternalServerError",
+      "message": "Undefined hehe"
+    },
   });
 });
 

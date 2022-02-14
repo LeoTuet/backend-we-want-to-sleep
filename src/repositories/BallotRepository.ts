@@ -3,12 +3,12 @@ import { Ballot, VotingOption } from "./schemas";
 import { ObjectId } from "mongodb";
 
 export default {
-  async addBallot(running: boolean, options: VotingOption[]) {
-    await getCollection("ballot").insertOne({ running, options });
+  async addBallot(running: boolean, createdBy: string, question: string, options: VotingOption[]) {
+    await getCollection("ballot").insertOne({ running, createdBy, question, options });
   },
 
   async deleteBallot(ballotID: string) {
-    getCollection("ballot").deleteOne({ _id: new ObjectId(ballotID) });
+    await getCollection("ballot").deleteOne({ _id: new ObjectId(ballotID) });
   },
 
   async getBallot(ballotID: string): Promise<Ballot> {
