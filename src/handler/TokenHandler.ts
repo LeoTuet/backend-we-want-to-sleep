@@ -10,7 +10,7 @@ const adminService = new AdminService()
 
 export class TokenHandler {
   public async generateTokens(amount: number, valid: boolean, createdBy: string): Promise<string[]> {
-    if (!await adminService.checkIfUsernameExists("createdBy"))
+    if (!await adminService.checkIfUsernameExists(createdBy))
       throw new UnprocessableEntity("There is no admin with the given username")
     const tokens = generateTokens(amount)
     await tokenService.addTokens(tokens, valid, createdBy)
