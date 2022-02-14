@@ -2,20 +2,25 @@ import TokenRepository from "../repositories/TokenRepository";
 
 
 export class TokenService {
+  public async addTokens(tokens: string[], valid: boolean, createdBy: string) {
+    const createdAt = new Date()
+    await TokenRepository.addTokens(tokens.map(token => {
+      return {
+        token,
+        valid,
+        createdBy,
+        createdAt
+      }
+    }))
+  }
 
-    public addToken(token: string, valid: boolean) {
-        TokenRepository.addToken(token, valid)
-    }
+  public deleteToken = TokenRepository.deleteToken
 
-    public deleteToken(token: string) {
-        TokenRepository.deleteToken(token)
-    }
+  public async checkIfTokenExists(token: string): Promise<boolean> {
+    return (await TokenRepository.getToken(token)) != null
+  }
 
-    public async checkIfTokenExists(token: string): Promise<boolean> {
-        return (await TokenRepository.getToken(token)) != null
-    }
-
-    public async checkIfTokenValid(token: string): Promise<boolean> {
-        return (await TokenRepository.getToken(token)).valid
-    }
+  public async checkIfTokenValid(token: string): Promise<boolean> {
+    return (await TokenRepository.getToken(token)).valid
+  }
 }

@@ -18,7 +18,7 @@
     "ignore": [
       "src/public"
     ],
-    "exec": "./node_modules/.bin/ts-node -r tsconfig-paths/register ./src"
+    "exec": "./node_modules/.bin/ts-node src/index.ts"
   },
   "_moduleAliases": {
     "@daos": "dist/daos",

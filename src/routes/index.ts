@@ -3,7 +3,7 @@ import VoteController from "../controller/VoteController";
 import BallotController from "../controller/BallotController";
 import TokenController from "../controller/TokenController";
 import AdminController from "../controller/AdminController";
-import {isAdmin} from "../utils/AuthMiddleware";
+import {isAdmin} from "../middleware/AuthMiddleware";
 import {isCaptchaValid} from "../middleware/CaptchaMiddleware";
 
 // User-route
@@ -19,6 +19,7 @@ ballotRouter.get("/running", BallotController.listRunning);
 
 const tokenRouter = Router();
 tokenRouter.get("/status/:ballotID/:token", TokenController.getStatus);
+tokenRouter.post("/", isAdmin, TokenController.generate);
 
 const adminRouter = Router();
 adminRouter.post("/login", AdminController.login);

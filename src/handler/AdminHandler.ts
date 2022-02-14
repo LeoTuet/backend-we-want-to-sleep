@@ -1,6 +1,6 @@
 import {AdminService} from "../services/AdminService";
 import JWTs from "../utils/JWTs";
-import {Forbidden, UnprocessableEntity} from "http-errors";
+import {Forbidden, NotFound, UnprocessableEntity} from "http-errors";
 
 const adminService = new AdminService();
 
@@ -20,7 +20,7 @@ export class AdminHandler {
 
   public async deleteAdmin(username: string) {
     if (!await adminService.checkIfUsernameExists(username))
-      throw new UnprocessableEntity("There is no user with the given username")
+      throw new NotFound("There is no user with the given username")
     await adminService.deleteAdmin(username)
   }
 }
