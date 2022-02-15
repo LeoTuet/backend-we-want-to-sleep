@@ -3,16 +3,19 @@ import {Vote} from "./schemas";
 import {ObjectId} from "mongodb";
 
 export default {
-  addVote(token: string, ballotID: string, vote: string, votedAt: Date) {
-    getCollection("vote").insertOne({
+  async addVote(token: string, ballotID: string, vote: string, votedAt: Date) {
+    const result = await getCollection("vote").insertOne({
       token,
       ballotID,
       vote,
       votedAt: votedAt
     })
+    if (!result.acknowledged) {
+        throw Error("Vote could not be created")
+    }
   },
 
   async getVote(token: string, ballotID: ObjectId): Promise<Vote> {
-    return (await getCollection<Vote>("vote").findOne({token, ballotID}))
+    return await getCollection<Vote>("vote").findOne({token, ballotID})
   }
 }

@@ -4,11 +4,17 @@ import { ObjectId } from "mongodb";
 
 export default {
   async addBallot(running: boolean, createdBy: string, question: string, options: VotingOption[]) {
-    await getCollection("ballot").insertOne({ running, createdBy, question, options });
+    const result = await getCollection("ballot").insertOne({ running, createdBy, question, options });
+    if (!result.acknowledged) {
+      throw Error("Ballot could not be created")
+    }
   },
 
   async deleteBallot(ballotID: string) {
-    await getCollection("ballot").deleteOne({ _id: new ObjectId(ballotID) });
+    const result = await getCollection("ballot").deleteOne({ _id: new ObjectId(ballotID) });
+    if (result.deletedCount !== 1) {
+      throw Error("Ballot could not be deleted")
+    }
   },
 
   async getBallot(ballotID: string): Promise<Ballot> {
