@@ -16,7 +16,7 @@ export class BallotService {
     if (ballot) {
       return ballot;
     } else {
-      throw new createHttpError.NotFound();
+      throw new createHttpError.NotFound("There is no running ballot");
     }
   };
 
