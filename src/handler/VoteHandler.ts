@@ -24,4 +24,9 @@ export class VoteHandler {
         if (!await voteService.checkIfAlreadyVoted(ballotID, token)) throw new NotFound("Not voted yet")
         return (await voteService.getVote(ballotID, token))
     }
+
+    public async getVotes(ballotID: string): Promise<Vote[]> {
+        if (!await ballotService.checkIfBallotIDExists(ballotID)) throw new NotFound("BallotID not found")
+        return await voteService.getVotes(ballotID)
+    }
 }

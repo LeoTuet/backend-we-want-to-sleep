@@ -17,5 +17,9 @@ export default {
 
   async getVote(token: string, ballotID: ObjectId): Promise<Vote> {
     return await getCollection<Vote>("vote").findOne({token, ballotID})
+  },
+
+  async getVotes(ballotID: ObjectId) : Promise<Vote[]> {
+    return getCollection<Vote>("vote").find({ballotID}).toArray();
   }
 }

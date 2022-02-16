@@ -5,7 +5,7 @@ import { ObjectId } from "mongodb";
 
 export class VoteService {
   public async saveVote(ballotID: string, token: string, vote: string) {
-    VoteRepository.addVote(
+    await VoteRepository.addVote(
       token,
       (await BallotRepository.getBallot(ballotID))._id,
       vote,
@@ -15,6 +15,10 @@ export class VoteService {
 
   public async getVote(ballotID: string, token: string): Promise<Vote> {
     return await VoteRepository.getVote(token, new ObjectId(ballotID));
+  }
+
+  public async getVotes(ballotID: string): Promise<Vote[]> {
+    return await VoteRepository.getVotes(new ObjectId(ballotID))
   }
 
   public async checkIfAlreadyVoted(

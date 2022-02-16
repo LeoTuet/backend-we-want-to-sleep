@@ -10,7 +10,8 @@ import { adminLoginLimiter, defaultLimiter } from "../middleware/RateLimitMiddle
 // User-route
 const voteRouter = Router();
 voteRouter.post("/:ballotID", isCaptchaValid, VoteController.add);
-voteRouter.get("/:ballotID/:token", VoteController.get);
+voteRouter.get("/:ballotID", isAdmin, VoteController.listByBallot);
+voteRouter.get("/:ballotID/:token", VoteController.getByToken);
 
 const ballotRouter = Router();
 ballotRouter.get("/", BallotController.list);
