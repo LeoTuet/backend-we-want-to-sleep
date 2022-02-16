@@ -2,6 +2,7 @@ import compression from 'compression';
 import express, {Request, Response, NextFunction} from 'express';
 import baseRouter from './routes';
 import {isHttpError} from "http-errors";
+import Joi from "joi";
 
 const app = express();
 
@@ -28,11 +29,22 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  if (res.headersSent) {
+  if (!Joi.isError(err)) {
     return next(err);
   }
+  return res.status(400).json({
+    error: {
+      "timestamp": new Date(),
+      "status": 400,
+      "error": err.name,
+      "message": err.details
+    },
+  });
+});
 
-  console.error(err)
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+
   return res.status(500).json({
     error: {
       "timestamp": new Date(),
