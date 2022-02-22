@@ -44,7 +44,10 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-
+   if (res.headersSent) {
+    return next(err);
+  }
+  console.error(err)
   return res.status(500).json({
     error: {
       "timestamp": new Date(),
