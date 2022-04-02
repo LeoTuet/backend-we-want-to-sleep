@@ -21,6 +21,6 @@ export class TokenService {
   }
 
   public async checkIfTokenValid(token: string): Promise<boolean> {
-    return (await TokenRepository.getToken(token)).valid
+    return !!(await TokenRepository.getToken(token)).valid
   }
 }
