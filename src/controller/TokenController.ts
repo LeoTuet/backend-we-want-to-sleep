@@ -1,15 +1,20 @@
-import {Request} from "express";
+import { Request } from "express";
 import Joi from "joi";
-import {asyncHandler} from "../utils/AsyncHandler";
-import {TokenHandler} from "../handler/TokenHandler";
+import { asyncHandler } from "../utils/AsyncHandler";
+import { TokenHandler } from "../handler/TokenHandler";
 
 const tokenHandler = new TokenHandler();
 
-export const tokenStatusSchema = Joi.object().keys({
+const tokenStatusSchema = Joi.object().keys({
   ballotID: Joi.string().required(),
   token: Joi.string()
     .regex(/[0-9A-Z]{4}[-][0-9A-Z]{4}[-][0-9A-Z]{4}/)
     .required(),
+});
+
+const tokenGenerationSchema = Joi.object().keys({
+  amount: Joi.number().positive().required(),
+  valid: Joi.boolean().strict(),
 });
 
 export default {
@@ -26,9 +31,24 @@ export default {
     }
   ),
   generate: asyncHandler(
-    async (req: Request<{}, {}, { amount: number, valid: boolean }, {}, { username: string }>, res) => {
+    async (
+      req: Request<
+        {},
+        {},
+        { amount: number; valid: boolean },
+        {},
+        { username: string }
+      >,
+      res
+    ) => {
+      Joi.assert(req.body, tokenGenerationSchema);
       res.json({
-        data: await tokenHandler.generateTokens(req.body.amount, req.body.valid, req.res.locals.username)
-      })
-    })
+        data: await tokenHandler.generateTokens(
+          req.body.amount,
+          req.body.valid ?? true,
+          req.res.locals.username
+        ),
+      });
+    }
+  ),
 };
