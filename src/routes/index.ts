@@ -1,11 +1,14 @@
-import {Router} from "express";
+import { Router } from "express";
 import VoteController from "../controller/VoteController";
 import BallotController from "../controller/BallotController";
 import TokenController from "../controller/TokenController";
 import AdminController from "../controller/AdminController";
-import {isAdmin} from "../middleware/AuthMiddleware";
-import {isCaptchaValid} from "../middleware/CaptchaMiddleware";
-import { adminLoginLimiter, defaultLimiter } from "../middleware/RateLimitMiddleware";
+import { isAdmin } from "../middleware/AuthMiddleware";
+import { isCaptchaValid } from "../middleware/CaptchaMiddleware";
+import {
+  adminLoginLimiter,
+  defaultLimiter,
+} from "../middleware/RateLimitMiddleware";
 
 // User-route
 const voteRouter = Router();
@@ -18,6 +21,7 @@ ballotRouter.get("/", BallotController.list);
 ballotRouter.post("/", isAdmin, BallotController.add);
 ballotRouter.delete("/", isAdmin, BallotController.delete);
 ballotRouter.get("/running", BallotController.listRunning);
+ballotRouter.put("/:ballotID", isAdmin, BallotController.put);
 
 const tokenRouter = Router();
 tokenRouter.get("/status/:ballotID/:token", TokenController.getStatus);
