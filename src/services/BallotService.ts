@@ -10,6 +10,8 @@ export class BallotService {
 
   public deleteBallot = BallotRepository.deleteBallot;
 
+  public updateBallot = BallotRepository.updateBallot;
+
   public getRunningBallot = async () => {
     const ballot = await BallotRepository.getRunningBallot();
 
