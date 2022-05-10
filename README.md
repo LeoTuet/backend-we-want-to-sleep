@@ -24,6 +24,7 @@ Frontend for [wewanttosleep.de](https://wewanttosleep.de/)
 ## Built with
 - [Node.js](https://github.com/nodejs)
 - [TypeScript](https://github.com/microsoft/TypeScript)
+- [MongoDB](https://www.mongodb.com/)
 
 ## Contribute
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
@@ -73,6 +74,16 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+
+### MongoDB
+
+In order for this project to run you need a running instance of a MongoDB
+
+### Enviornment Variables
+
+There is a list of environment variables which need to be set a list of them can be found [here](https://github.com/LeoTuet/deployment-we-want-to-sleep).
+
+The variables can be set in a .env file as key-value pairs (please note that you may need to adjust the path to the .env file [here](https://github.com/LeoTuet/backend-we-want-to-sleep/blob/main/src/utils/secrets.ts#L6))
 
 ## License
 
