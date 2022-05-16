@@ -64,4 +64,16 @@ export default {
       res.status(204).send()
     }
   ),
+  getAdminStatus: asyncHandler(
+    async (req: Request<{ ballotID: string }, {}, {}>, res) => {
+      const status = await ballotHandler.getAdminStatus(req.params.ballotID);
+      res.status(200).send(status);
+    }
+  ),
+  getTotalVoteCount: asyncHandler(
+      async (req: Request<{ ballotID: string }, {}, {}>, res) => {
+          const totalCount = await ballotHandler.getTotalVoteCount(req.params.ballotID);
+          res.status(200).send(totalCount);
+      }
+  )
 };
