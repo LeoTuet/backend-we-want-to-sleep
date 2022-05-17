@@ -76,7 +76,7 @@ export class VoteService {
 
     // fill records into array list
     const out: VoteResult[] = [];
-    for (const result of Object.getOwnPropertyNames(results)) {
+    for (const result of Object.keys(results)) {
       const voteOption = voteOptions.find(vo => result == vo.identifier)
       const vr: VoteResult = {
         questionIdentifier: voteOption.identifier,
