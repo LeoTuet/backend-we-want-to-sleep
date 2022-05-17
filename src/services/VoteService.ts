@@ -78,12 +78,12 @@ export class VoteService {
     const out: VoteResult[] = [];
     for (const result of Object.keys(results)) {
       const voteOption = voteOptions.find(vo => result == vo.identifier)
-      const vr: VoteResult = {
+      const voteResult = {
         questionIdentifier: voteOption.identifier,
         questionLabel: voteOption.label,
         amount: results[result]
       }
-      out.push(vr);
+      out.push(voteResult);
     }
     return out;
   }
