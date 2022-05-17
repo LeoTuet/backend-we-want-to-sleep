@@ -15,11 +15,11 @@ export class BallotService {
   public getRunningBallot = async () => {
     const ballot = await BallotRepository.getRunningBallot();
 
-    if (ballot) {
-      return ballot;
-    } else {
+    if (!ballot) {
       throw new createHttpError.NotFound("There is no running ballot");
     }
+
+    return ballot;
   };
 
   public async checkIfBallotIDExists(ballotID: string): Promise<boolean> {

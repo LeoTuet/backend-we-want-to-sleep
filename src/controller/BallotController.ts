@@ -64,10 +64,10 @@ export default {
       res.status(204).send()
     }
   ),
-  getAdminStatus: asyncHandler(
+  getVoteResult: asyncHandler(
     async (req: Request<{ ballotID: string }, {}, {}>, res) => {
-      const status = await ballotHandler.getAdminStatus(req.params.ballotID);
-      res.status(200).send(status);
+      const result = await ballotHandler.getVoteResult(req.params.ballotID);
+      res.status(200).send(result);
     }
   ),
   getTotalVoteCount: asyncHandler(

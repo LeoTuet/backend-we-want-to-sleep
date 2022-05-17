@@ -1,7 +1,9 @@
-import { Vote } from "../repositories/schemas";
+import { Vote, VotingOption } from "../repositories/schemas";
 import BallotRepository from "../repositories/BallotRepository";
 import VoteRepository from "../repositories/VoteRepository";
 import { ObjectId } from "mongodb";
+import { NotFound } from "http-errors";
+import { TotalVoteCount, VoteResult } from "../handler/BallotHandler";
 
 export class VoteService {
   public async saveVote(ballotID: string, token: string, vote: string) {
@@ -35,5 +37,49 @@ export class VoteService {
     return (await BallotRepository.getBallot(ballotID)).options
       .map((option) => option.identifier)
       .includes(vote);
+  }
+
+  public async countVotes(
+    ballotID: string
+  ): Promise<TotalVoteCount> {
+    if (await BallotRepository.getBallot(ballotID) == null)
+      throw new NotFound("Ballot with given id does not exist");
+
+    const votes = await this.getVotes(ballotID);
+    return {
+      count: votes.length
+    };
+  }
+
+  public async getVoteResult(
+    ballotID: string,
+    voteOptions: VotingOption[]
+  ): Promise<VoteResult[]> {
+    const votes = await this.getVotes(ballotID);
+
+    const results: Record<string, number> = {} as never
+
+    // init vote counter
+    for (const voteOption of voteOptions) {
+      results[voteOption.identifier] = 0
+    }
+
+    // count votes
+    for (const vote of votes) {
+      results[vote.vote]++;
+    }
+
+    // fill records into array list
+    const out: VoteResult[] = [];
+    for (const result of Object.getOwnPropertyNames(results)) {
+      const voteOption = voteOptions.find(vo => result == vo.identifier)
+      const vr: VoteResult = {
+        questionIdentifier: voteOption.identifier,
+        questionLabel: voteOption.label,
+        amount: results[result]
+      }
+      out.push(vr);
+    }
+    return out;
   }
 }

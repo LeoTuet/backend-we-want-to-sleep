@@ -60,39 +60,15 @@ export class BallotHandler {
     await ballotService.updateBallot(ballotID, running, question, options);
   }
 
-  public async getAdminStatus(
+  public async getVoteResult(
     ballotID: string
   ): Promise<VoteResult[]> {
     if (!(await ballotService.checkIfBallotIDExists(ballotID)))
       throw new NotFound("Ballot with given id does not exist");
 
     const ballot = await ballotService.getBallot(ballotID);
-    const votes = await voteService.getVotes(ballotID);
 
-    const results: Record<string, number> = {} as never
-
-    // init vote counter
-    for (const voteOption of ballot.options) {
-      results[voteOption.identifier] = 0
-    }
-
-    // count votes
-    for (const vote of votes) {
-      results[vote.vote]++;
-    }
-
-    // fill records into array list
-    const out: VoteResult[] = [];
-    for (const result of Object.getOwnPropertyNames(results)) {
-      const voteOption = ballot.options.find(vo => result == vo.identifier)
-      const vr: VoteResult = {
-        questionIdentifier: voteOption.identifier,
-        questionLabel: voteOption.label,
-        amount: results[result]
-      }
-      out.push(vr);
-    }
-    return out;
+    return await voteService.getVoteResult(ballotID, ballot.options)
   }
 
   public async getTotalVoteCount(
@@ -101,10 +77,6 @@ export class BallotHandler {
     if (!(await ballotService.checkIfBallotIDExists(ballotID)))
       throw new NotFound("Ballot with given id does not exist");
 
-    const votes = await voteService.getVotes(ballotID);
-
-    return {
-      count: votes.length
-    } as TotalVoteCount;
+    return await voteService.countVotes(ballotID);
   }
 }
