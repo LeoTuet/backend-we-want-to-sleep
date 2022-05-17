@@ -3,7 +3,6 @@ import { VotingOption } from "../repositories/schemas";
 import { BallotService } from "../services/BallotService";
 import { TotalVoteCount, VoteResult, VoteService } from "../services/VoteService";
 import { AdminService } from "../services/AdminService";
-import BallotRepository from "../repositories/BallotRepository";
 
 const ballotService = new BallotService();
 const adminService = new AdminService();
@@ -36,7 +35,7 @@ export class BallotHandler {
   public getBallots = ballotService.getBallots;
 
   public getRunningBallot = async () => {
-    const ballot = await BallotRepository.getRunningBallot();
+    const ballot = await ballotService.getRunningBallot();
 
     if (!ballot) {
       throw new createHttpError.NotFound("There is no running ballot");
