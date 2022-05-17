@@ -1,4 +1,4 @@
-import createHttpError, { NotFound, UnprocessableEntity } from "http-errors";
+import { NotFound, UnprocessableEntity } from "http-errors";
 import { VotingOption } from "../repositories/schemas";
 import { BallotService } from "../services/BallotService";
 import { AdminService } from "../services/AdminService";
@@ -36,7 +36,7 @@ export class BallotHandler {
     const ballot = await ballotService.getRunningBallot();
 
     if (!ballot) {
-      throw new createHttpError.NotFound("There is no running ballot");
+      throw new NotFound("There is no running ballot");
     }
 
     return ballot;
