@@ -1,22 +1,12 @@
 import { NotFound, UnprocessableEntity } from "http-errors";
 import { VotingOption } from "../repositories/schemas";
 import { BallotService } from "../services/BallotService";
-import { VoteService } from "../services/VoteService";
+import { TotalVoteCount, VoteResult, VoteService } from "../services/VoteService";
 import { AdminService } from "../services/AdminService";
 
 const ballotService = new BallotService();
 const adminService = new AdminService();
 const voteService = new VoteService();
-
-export interface VoteResult {
-  questionIdentifier: string,
-  questionLabel: string,
-  amount: number
-}
-
-export interface TotalVoteCount {
-  count: number
-}
 
 export class BallotHandler {
   public async addBallot(

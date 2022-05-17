@@ -3,7 +3,16 @@ import BallotRepository from "../repositories/BallotRepository";
 import VoteRepository from "../repositories/VoteRepository";
 import { ObjectId } from "mongodb";
 import { NotFound } from "http-errors";
-import { TotalVoteCount, VoteResult } from "../handler/BallotHandler";
+
+export interface VoteResult {
+  questionIdentifier: string,
+  questionLabel: string,
+  amount: number
+}
+
+export interface TotalVoteCount {
+  count: number
+}
 
 export class VoteService {
   public async saveVote(ballotID: string, token: string, vote: string) {
