@@ -2,7 +2,6 @@ import { Vote, VotingOption } from "../repositories/schemas";
 import BallotRepository from "../repositories/BallotRepository";
 import VoteRepository from "../repositories/VoteRepository";
 import { ObjectId } from "mongodb";
-import { NotFound } from "http-errors";
 
 export interface VoteResult {
   questionIdentifier: string,
@@ -51,9 +50,6 @@ export class VoteService {
   public async countVotes(
     ballotID: string
   ): Promise<TotalVoteCount> {
-    if (await BallotRepository.getBallot(ballotID) == null)
-      throw new NotFound("Ballot with given id does not exist");
-
     const votes = await this.getVotes(ballotID);
     return {
       count: votes.length
