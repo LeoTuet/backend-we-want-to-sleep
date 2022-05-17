@@ -67,13 +67,17 @@ export default {
   getVoteResult: asyncHandler(
     async (req: Request<{ ballotID: string }, {}, {}>, res) => {
       const result = await ballotHandler.getVoteResult(req.params.ballotID);
-      res.status(200).send(result);
+      res.status(200).send({
+        body: result
+      });
     }
   ),
   getTotalVoteCount: asyncHandler(
       async (req: Request<{ ballotID: string }, {}, {}>, res) => {
           const totalCount = await ballotHandler.getTotalVoteCount(req.params.ballotID);
-          res.status(200).send(totalCount);
+          res.status(200).send({
+            body: totalCount
+          });
       }
   )
 };
