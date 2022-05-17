@@ -1,8 +1,9 @@
-import { NotFound, UnprocessableEntity } from "http-errors";
+import createHttpError, { NotFound, UnprocessableEntity } from "http-errors";
 import { VotingOption } from "../repositories/schemas";
 import { BallotService } from "../services/BallotService";
 import { TotalVoteCount, VoteResult, VoteService } from "../services/VoteService";
 import { AdminService } from "../services/AdminService";
+import BallotRepository from "../repositories/BallotRepository";
 
 const ballotService = new BallotService();
 const adminService = new AdminService();
@@ -34,7 +35,15 @@ export class BallotHandler {
 
   public getBallots = ballotService.getBallots;
 
-  public getRunningBallot = ballotService.getRunningBallot;
+  public getRunningBallot = async () => {
+    const ballot = await BallotRepository.getRunningBallot();
+
+    if (!ballot) {
+      throw new createHttpError.NotFound("There is no running ballot");
+    }
+
+    return ballot;
+  };
 
   public async updateBallot(
     ballotID: string,
