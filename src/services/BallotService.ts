@@ -1,4 +1,3 @@
-import createHttpError from "http-errors";
 import BallotRepository from "../repositories/BallotRepository";
 
 export class BallotService {
@@ -12,15 +11,7 @@ export class BallotService {
 
   public updateBallot = BallotRepository.updateBallot;
 
-  public getRunningBallot = async () => {
-    const ballot = await BallotRepository.getRunningBallot();
-
-    if (ballot) {
-      return ballot;
-    } else {
-      throw new createHttpError.NotFound("There is no running ballot");
-    }
-  };
+  public getRunningBallot = BallotRepository.getRunningBallot;
 
   public async checkIfBallotIDExists(ballotID: string): Promise<boolean> {
     return (await this.getBallot(ballotID)) != null;

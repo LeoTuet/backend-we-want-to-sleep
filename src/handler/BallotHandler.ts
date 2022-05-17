@@ -32,7 +32,15 @@ export class BallotHandler {
 
   public getBallots = ballotService.getBallots;
 
-  public getRunningBallot = ballotService.getRunningBallot;
+  public async getRunningBallot() {
+    const ballot = await ballotService.getRunningBallot();
+
+    if (!ballot) {
+      throw new NotFound("There is no running ballot");
+    }
+
+    return ballot;
+  };
 
   public async updateBallot(
     ballotID: string,

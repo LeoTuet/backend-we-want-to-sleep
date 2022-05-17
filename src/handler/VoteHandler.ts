@@ -1,4 +1,4 @@
-import {VoteService} from "../services/VoteService"
+import { TotalVoteCount, VoteResult, VoteService } from "../services/VoteService"
 import {TokenService} from "../services/TokenService";
 import {Forbidden, NotFound, Unauthorized, UnprocessableEntity} from "http-errors";
 import {Vote} from "../repositories/schemas";
@@ -28,5 +28,19 @@ export class VoteHandler {
     public async getVotes(ballotID: string): Promise<Vote[]> {
         if (!await ballotService.checkIfBallotIDExists(ballotID)) throw new NotFound("BallotID not found")
         return await voteService.getVotes(ballotID)
+    }
+
+    public async getVoteResult(
+      ballotID: string
+    ): Promise<VoteResult[]> {
+        if (!await ballotService.checkIfBallotIDExists(ballotID)) throw new NotFound("Ballot with given id does not exist");
+        return await voteService.getVoteResult(ballotID)
+    }
+
+    public async getTotalVoteCount(
+      ballotID: string
+    ): Promise<TotalVoteCount> {
+        if (!await ballotService.checkIfBallotIDExists(ballotID)) throw new NotFound("Ballot with given id does not exist");
+        return await voteService.countVotes(ballotID);
     }
 }
