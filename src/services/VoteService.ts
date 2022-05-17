@@ -1,4 +1,4 @@
-import { Vote, VotingOption } from "../repositories/schemas";
+import { Vote } from "../repositories/schemas";
 import BallotRepository from "../repositories/BallotRepository";
 import VoteRepository from "../repositories/VoteRepository";
 import { ObjectId } from "mongodb";
@@ -57,10 +57,11 @@ export class VoteService {
   }
 
   public async getVoteResult(
-    ballotID: string,
-    voteOptions: VotingOption[]
+    ballotID: string
   ): Promise<VoteResult[]> {
     const votes = await this.getVotes(ballotID);
+    const ballot = await BallotRepository.getBallot(ballotID);
+    const voteOptions = ballot.options;
 
     const results: Record<string, number> = {} as never
 

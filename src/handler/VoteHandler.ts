@@ -34,8 +34,7 @@ export class VoteHandler {
       ballotID: string
     ): Promise<VoteResult[]> {
         if (!await ballotService.checkIfBallotIDExists(ballotID)) throw new NotFound("Ballot with given id does not exist");
-        const ballot = await ballotService.getBallot(ballotID);
-        return await voteService.getVoteResult(ballotID, ballot.options)
+        return await voteService.getVoteResult(ballotID)
     }
 
     public async getTotalVoteCount(
