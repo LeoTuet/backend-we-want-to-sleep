@@ -3,8 +3,10 @@ import { asyncHandler } from "../utils/AsyncHandler";
 import { BallotHandler } from "../handler/BallotHandler";
 import { Ballot } from "../repositories/schemas";
 import Joi from "joi";
+import { VoteHandler } from "../handler/VoteHandler";
 
 const ballotHandler = new BallotHandler();
+const voteHandler = new VoteHandler();
 
 type CreationBallot = Omit<Ballot, "_id">;
 
@@ -66,7 +68,7 @@ export default {
   ),
   getVoteResult: asyncHandler(
     async (req: Request<{ ballotID: string }, {}, {}>, res) => {
-      const result = await ballotHandler.getVoteResult(req.params.ballotID);
+      const result = await voteHandler.getVoteResult(req.params.ballotID);
       res.status(200).send({
         body: result
       });
@@ -74,7 +76,7 @@ export default {
   ),
   getTotalVoteCount: asyncHandler(
       async (req: Request<{ ballotID: string }, {}, {}>, res) => {
-          const totalCount = await ballotHandler.getTotalVoteCount(req.params.ballotID);
+          const totalCount = await voteHandler.getTotalVoteCount(req.params.ballotID);
           res.status(200).send({
             body: totalCount
           });

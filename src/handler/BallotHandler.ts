@@ -1,12 +1,10 @@
 import createHttpError, { NotFound, UnprocessableEntity } from "http-errors";
 import { VotingOption } from "../repositories/schemas";
 import { BallotService } from "../services/BallotService";
-import { TotalVoteCount, VoteResult, VoteService } from "../services/VoteService";
 import { AdminService } from "../services/AdminService";
 
 const ballotService = new BallotService();
 const adminService = new AdminService();
-const voteService = new VoteService();
 
 export class BallotHandler {
   public async addBallot(
@@ -56,25 +54,5 @@ export class BallotHandler {
       throw new UnprocessableEntity("Not enough vote options");
 
     await ballotService.updateBallot(ballotID, running, question, options);
-  }
-
-  public async getVoteResult(
-    ballotID: string
-  ): Promise<VoteResult[]> {
-    if (!(await ballotService.checkIfBallotIDExists(ballotID)))
-      throw new NotFound("Ballot with given id does not exist");
-
-    const ballot = await ballotService.getBallot(ballotID);
-
-    return await voteService.getVoteResult(ballotID, ballot.options)
-  }
-
-  public async getTotalVoteCount(
-    ballotID: string
-  ): Promise<TotalVoteCount> {
-    if (!(await ballotService.checkIfBallotIDExists(ballotID)))
-      throw new NotFound("Ballot with given id does not exist");
-
-    return await voteService.countVotes(ballotID);
   }
 }
