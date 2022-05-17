@@ -32,7 +32,7 @@ export class BallotHandler {
 
   public getBallots = ballotService.getBallots;
 
-  public getRunningBallot = async () => {
+  public async getRunningBallot() {
     const ballot = await ballotService.getRunningBallot();
 
     if (!ballot) {
