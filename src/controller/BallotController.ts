@@ -12,7 +12,7 @@ type CreationBallot = Omit<Ballot, "_id">;
 
 type UpdateBallot = Omit<CreationBallot, "createdBy">;
 
-const CreateBallotSchema = Joi.object().keys({
+const createBallotSchema = Joi.object().keys({
   running: Joi.boolean().required().strict(),
   question: Joi.string().required(),
   options: Joi.array()
@@ -23,6 +23,10 @@ const CreateBallotSchema = Joi.object().keys({
         label: Joi.string().required(),
       })
     ),
+});
+
+const ballotIdSchema = Joi.object().keys({
+  ballotID: Joi.string().length(24).required(),
 });
 
 export default {
@@ -39,47 +43,53 @@ export default {
       req: Request<{}, {}, CreationBallot, {}, { username: string }>,
       res
     ) => {
-      Joi.assert(req.body, CreateBallotSchema);
+      Joi.assert(req.body, createBallotSchema);
       await ballotHandler.addBallot(
         req.body.running,
         req.res.locals.username,
         req.body.question,
         req.body.options
       );
-      res.status(204).send()
+      res.status(204).send();
     }
   ),
 
   delete: asyncHandler(async (req: Request<{}, {}, { id: string }>, res) => {
+    Joi.assert(req.params, ballotIdSchema);
     await ballotHandler.deleteBallot(req.body.id);
-    res.statusCode = 204;
+    res.status(204).send();
   }),
   put: asyncHandler(
     async (req: Request<{ ballotID: string }, {}, UpdateBallot>, res) => {
-      Joi.assert(req.body, CreateBallotSchema);
+      Joi.assert(req.params, ballotIdSchema);
+      Joi.assert(req.body, createBallotSchema);
       await ballotHandler.updateBallot(
         req.params.ballotID,
         req.body.running,
         req.body.question,
         req.body.options
       );
-      res.status(204).send()
+      res.status(204).send();
     }
   ),
   getVoteResult: asyncHandler(
     async (req: Request<{ ballotID: string }, {}, {}>, res) => {
+      Joi.assert(req.params, ballotIdSchema);
       const result = await voteHandler.getVoteResult(req.params.ballotID);
-      res.status(200).send({
-        body: result
+      res.status(200).json({
+        data: result,
       });
     }
   ),
   getTotalVoteCount: asyncHandler(
-      async (req: Request<{ ballotID: string }, {}, {}>, res) => {
-          const totalCount = await voteHandler.getTotalVoteCount(req.params.ballotID);
-          res.status(200).send({
-            body: totalCount
-          });
-      }
-  )
+    async (req: Request<{ ballotID: string }, {}, {}>, res) => {
+      Joi.assert(req.params, ballotIdSchema);
+      const totalCount = await voteHandler.getTotalVoteCount(
+        req.params.ballotID
+      );
+      res.status(200).json({
+        data: totalCount,
+      });
+    }
+  ),
 };

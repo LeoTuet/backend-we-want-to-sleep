@@ -7,6 +7,8 @@ const ballotService = new BallotService();
 const adminService = new AdminService();
 
 export class BallotHandler {
+  public getBallots = ballotService.getBallots;
+
   public async addBallot(
     running: boolean,
     createdBy: string,
@@ -30,17 +32,12 @@ export class BallotHandler {
     await ballotService.deleteBallot(ballotID);
   }
 
-  public getBallots = ballotService.getBallots;
-
   public async getRunningBallot() {
     const ballot = await ballotService.getRunningBallot();
-
-    if (!ballot) {
-      throw new NotFound("There is no running ballot");
-    }
+    if (!ballot) throw new NotFound("There is no running ballot");
 
     return ballot;
-  };
+  }
 
   public async updateBallot(
     ballotID: string,

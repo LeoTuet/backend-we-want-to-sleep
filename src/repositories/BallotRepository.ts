@@ -15,18 +15,16 @@ export default {
       question,
       options,
     });
-    if (!result.acknowledged) {
-      throw Error("Ballot could not be created");
-    }
+
+    if (!result.acknowledged) throw Error("Ballot could not be created");
   },
 
   async deleteBallot(ballotID: string): Promise<void> {
     const result = await getCollection("ballot").deleteOne({
       _id: new ObjectId(ballotID),
     });
-    if (result.deletedCount !== 1) {
-      throw Error("Ballot could not be deleted");
-    }
+
+    if (result.deletedCount !== 1) throw Error("Ballot could not be deleted");
   },
 
   async getBallot(ballotID: string): Promise<Ballot> {
@@ -60,6 +58,7 @@ export default {
         },
       }
     );
+
     if (!result.acknowledged) throw Error("Ballot could not be updated");
   },
 };

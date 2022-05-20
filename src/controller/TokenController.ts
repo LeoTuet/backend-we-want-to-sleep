@@ -6,7 +6,7 @@ import { TokenHandler } from "../handler/TokenHandler";
 const tokenHandler = new TokenHandler();
 
 const tokenStatusSchema = Joi.object().keys({
-  ballotID: Joi.string().required(),
+  ballotID: Joi.string().length(24).required(),
   token: Joi.string()
     .regex(/[0-9A-Z]{4}[-][0-9A-Z]{4}[-][0-9A-Z]{4}/)
     .required(),
@@ -21,12 +21,12 @@ export default {
   getStatus: asyncHandler(
     async (req: Request<{ ballotID: string; token: string }, {}, {}>, res) => {
       Joi.assert(req.params, tokenStatusSchema);
-
+      const status = await tokenHandler.getTokenStatus(
+        req.params.token,
+        req.params.ballotID
+      );
       res.json({
-        data: await tokenHandler.getTokenStatus(
-          req.params.token,
-          req.params.ballotID
-        ),
+        data: status,
       });
     }
   ),
@@ -42,12 +42,13 @@ export default {
       res
     ) => {
       Joi.assert(req.body, tokenGenerationSchema);
+      const tokens = await tokenHandler.generateTokens(
+        req.body.amount,
+        req.body.valid ?? true,
+        req.res.locals.username
+      );
       res.json({
-        data: await tokenHandler.generateTokens(
-          req.body.amount,
-          req.body.valid ?? true,
-          req.res.locals.username
-        ),
+        data: tokens,
       });
     }
   ),

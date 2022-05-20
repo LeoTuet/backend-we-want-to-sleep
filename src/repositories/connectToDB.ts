@@ -1,20 +1,19 @@
-import { MongoClient, Db } from "mongodb";
+import { Db, MongoClient } from "mongodb";
 import { secrets } from "../utils/secrets";
 
-const url = `mongodb://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}@${secrets.MONGO_HOST}`;
+const DB_URL = `mongodb://${secrets.MONGO_USER}:${secrets.MONGO_PASSWORD}@${secrets.MONGO_HOST}`;
+const DB_NAME = "wwts";
 
 export var db: Db;
 
 export const connectToDB = async () => {
-  const client = new MongoClient(url, {});
-  try {
-    await client.connect();
-    db = client.db("wwts");
-    prepareDatabase();
-    console.log("Connected to database!");
-  } catch (e) {
-    console.error(e);
-  }
+  const client = new MongoClient(DB_URL, {});
+
+  await client.connect();
+  db = client.db(DB_NAME);
+  await prepareDatabase();
+
+  console.log("Connected to database!");
 };
 
 export const getCollection = <Type = any>(name: string) => {
@@ -22,12 +21,10 @@ export const getCollection = <Type = any>(name: string) => {
 };
 
 async function prepareDatabase() {
-  try {
-    await getCollection("vote").createIndex({ token: 1, ballot: 1 }, { unique: true });
-    await getCollection("token").createIndex({ token: 1 }, { unique: true });
-    await getCollection("admin").createIndex({ username: 1 }, { unique: true });
-  } catch (err) {
-    console.log(err);
-    return { message: "Error while saving User" };
-  }
+  await getCollection("vote").createIndex(
+    { token: 1, ballot: 1 },
+    { unique: true }
+  );
+  await getCollection("token").createIndex({ token: 1 }, { unique: true });
+  await getCollection("admin").createIndex({ username: 1 }, { unique: true });
 }

@@ -13,7 +13,9 @@ export type GetSecretFn<S extends Secrets = Secrets> = (
   name: keyof S
 ) => S[keyof S];
 
-export function getDockerSecrets<T extends Secrets = Secrets>(secretDir?: string): T {
+export function getDockerSecrets<T extends Secrets = Secrets>(
+  secretDir?: string
+): T {
   const _secretDir = secretDir || DOCKER_SECRET_DIR;
 
   const secrets: Secrets = {};
@@ -24,9 +26,7 @@ export function getDockerSecrets<T extends Secrets = Secrets>(secretDir?: string
       const fullPath = path.join(_secretDir, file);
       const key = file;
       if (fs.lstatSync(fullPath).isDirectory()) return;
-      const data = fs.readFileSync(fullPath, "utf8").toString().trim();
-
-      secrets[key] = data;
+      secrets[key] = fs.readFileSync(fullPath, "utf8").toString().trim();
     });
   }
   return secrets as T;
@@ -38,35 +38,36 @@ export function getSecretFactory<S extends Secrets = Secrets>(
   return (name: keyof S) => secrets[name];
 }
 
-
-
 export function getLocalSecrets(filepath: string) {
-  const content = fs.readFileSync(filepath, 'utf8');
-  return content.trim().split(/\r?\n/u).reduce((result: { [key: string]: string; }, elem: string) => {
-    const line = elem.trim();
-    if (!line || line.startsWith('#')) {
+  const content = fs.readFileSync(filepath, "utf8");
+  return content
+    .trim()
+    .split(/\r?\n/u)
+    .reduce((result: { [key: string]: string }, elem: string) => {
+      const line = elem.trim();
+      if (!line || line.startsWith("#")) {
+        return result;
+      }
+      const splitIndex = line.indexOf("=");
+      const key = line.substring(0, splitIndex);
+      const val = line.substring(splitIndex + 1);
+      if (!key) {
+        throw new Error(`Missing key for environment variable in ${filepath}`);
+      }
+      result[key] =
+        val.startsWith("'") && val.endsWith("'") ? val.slice(1, -1) : val;
       return result;
-    }
-    const splitIndex = line.indexOf('=');
-    const key = line.substring(0, splitIndex);
-    const val = line.substring(splitIndex + 1);
-    if (!key) {
-      throw new Error(`Missing key for environment variable in ${filepath}`);
-    }
-    result[key] = (val.startsWith('\'') && val.endsWith('\'')) ? val.slice(1, -1) : val;
-    return result;
-  }, {});
+    }, {});
 }
 
 function getSecrets(dockerSecretDir: string, localSecretFile: string) {
-  const dockerSecrets = getDockerSecrets(DOCKER_SECRET_DIR)
+  const dockerSecrets = getDockerSecrets(DOCKER_SECRET_DIR);
   if (Object.keys(dockerSecrets).length) {
-      return dockerSecrets
+    return dockerSecrets;
   } else {
-      return getLocalSecrets(localSecretFile)
+    return getLocalSecrets(localSecretFile);
   }
 }
-
 
 // Provide defaults.
 export const secrets = getSecrets(DOCKER_SECRET_DIR, LOCAL_SECRET_FILE);

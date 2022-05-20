@@ -17,19 +17,22 @@
 
 # We want to sleep
 
-A school project to let students vote for a new start time. 
+A school project to let students vote for a new start time.
 
 Frontend for [wewanttosleep.de](https://wewanttosleep.de/)
 
 ## Built with
+
 - [Node.js](https://github.com/nodejs)
 - [TypeScript](https://github.com/microsoft/TypeScript)
 - [MongoDB](https://www.mongodb.com/)
 
 ## Contribute
+
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 
 To contribute:
+
 1. Fork the project
 2. Create a branch (`git checkout -b feature/new-feature`)
 3. Commit your changes (`git commit -m 'Added a new feature'`)

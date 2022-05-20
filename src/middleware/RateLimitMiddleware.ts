@@ -22,5 +22,5 @@ export const adminLoginLimiter = rateLimit({
   max: 5,
   standardHeaders: true,
   legacyHeaders: false,
-  message: defaultMessage
+  message: defaultMessage,
 });

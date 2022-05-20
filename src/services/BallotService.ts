@@ -14,6 +14,7 @@ export class BallotService {
   public getRunningBallot = BallotRepository.getRunningBallot;
 
   public async checkIfBallotIDExists(ballotID: string): Promise<boolean> {
-    return (await this.getBallot(ballotID)) != null;
+    const ballot = await this.getBallot(ballotID);
+    return ballot != null;
   }
 }
