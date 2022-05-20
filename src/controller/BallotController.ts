@@ -76,7 +76,7 @@ export default {
     async (req: Request<{ ballotID: string }, {}, {}>, res) => {
       Joi.assert(req.params, ballotIdSchema);
       const result = await voteHandler.getVoteResult(req.params.ballotID);
-      res.status(200).json({
+      res.json({
         data: result,
       });
     }
@@ -87,7 +87,7 @@ export default {
       const totalCount = await voteHandler.getTotalVoteCount(
         req.params.ballotID
       );
-      res.status(200).json({
+      res.json({
         data: totalCount,
       });
     }

@@ -13,7 +13,7 @@ export class AdminHandler {
   public async login(username: string, password: string): Promise<string> {
     if (!username || !password)
       throw new Unauthorized("Missing username or password");
-    if (!(await adminService.checkIfPasswordCorrect(username, password)))
+    if (!(await adminService.checkCredentials(username, password)))
       throw new Forbidden("Incorrect username or password");
 
     return JWTs.generateAccessToken(username);

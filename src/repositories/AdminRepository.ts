@@ -7,16 +7,12 @@ export default {
       username,
       passwordHash,
     });
-    if (!result.acknowledged) {
-      throw Error("Admin could not be created");
-    }
+    if (!result.acknowledged) throw Error("Admin could not be created");
   },
 
   async deleteAdmin(username: string) {
     const result = await getCollection("admin").deleteOne({ username });
-    if (result.deletedCount !== 1) {
-      throw Error("Admin could not be deleted");
-    }
+    if (result.deletedCount !== 1) throw Error("Admin could not be deleted");
   },
 
   async getAdmin(username: string): Promise<Admin> {

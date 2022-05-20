@@ -25,7 +25,7 @@ export class VoteHandler {
     await Promise.all([tokenExists, ballotExists]).then(
       ([resTokenExists, resBallotExists]) => {
         if (!resTokenExists) throw new Unauthorized("VoteToken not found");
-        if (!resBallotExists) throw new Forbidden("VoteToken not valid");
+        if (!resBallotExists) throw new Forbidden("Ballot not found");
       }
     );
 
@@ -35,9 +35,9 @@ export class VoteHandler {
 
     await Promise.all([voteOptionValid, tokenValid, alreadyVoted]).then(
       ([resVoteOptionValid, resTokenValid, resAlreadyVoted]) => {
-        if (!resVoteOptionValid) throw new NotFound("BallotID not found");
+        if (!resVoteOptionValid) throw new NotFound("Invalid vote option");
         if (!resTokenValid)
-          throw new UnprocessableEntity("Invalid vote option");
+          throw new UnprocessableEntity("VoteToken not valid");
         if (resAlreadyVoted) throw new Forbidden("Already voted");
       }
     );

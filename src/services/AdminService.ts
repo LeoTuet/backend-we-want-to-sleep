@@ -8,7 +8,7 @@ export class AdminService {
     await AdminRepository.addAdmin(username, await hash(password, 12));
   }
 
-  public async checkIfPasswordCorrect(
+  public async checkCredentials(
     username: string,
     password: string
   ): Promise<boolean> {
