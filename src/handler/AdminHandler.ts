@@ -10,6 +10,7 @@ import {
 const adminService = new AdminService();
 
 export class AdminHandler {
+  // old implementation
   public async login(username: string, password: string): Promise<string> {
     if (!username || !password)
       throw new Unauthorized("Missing username or password");

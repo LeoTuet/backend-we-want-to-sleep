@@ -11,6 +11,7 @@ export const adminCredsRaw = Joi.object().keys({
 });
 
 export default {
+  // old login endpoint
   login: asyncHandler(
     async (
       req: Request<{}, {}, { username: string; password: string }>,

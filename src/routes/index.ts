@@ -3,6 +3,7 @@ import VoteController from "../controller/VoteController";
 import BallotController from "../controller/BallotController";
 import TokenController from "../controller/TokenController";
 import AdminController from "../controller/AdminController";
+import AuthController from "../controller/AuthController";
 import { isAdmin } from "../middleware/AuthMiddleware";
 import { isCaptchaValid } from "../middleware/CaptchaMiddleware";
 import {
@@ -16,19 +17,20 @@ baseRouter.use(defaultLimiter);
 // User-route
 const voteRouter = Router();
 baseRouter.use("/vote", voteRouter);
-voteRouter.post("/:ballotID", isCaptchaValid, VoteController.add);
 voteRouter.get("/:ballotID", isAdmin, VoteController.listByBallot);
 voteRouter.get("/:ballotID/:token", VoteController.getByToken);
+voteRouter.post("/:ballotID", isCaptchaValid, VoteController.add);
 
 const ballotRouter = Router();
 baseRouter.use("/ballot", ballotRouter);
 ballotRouter.get("/", BallotController.list);
-ballotRouter.post("/", isAdmin, BallotController.add);
-ballotRouter.delete("/", isAdmin, BallotController.delete);
 ballotRouter.get("/running", BallotController.listRunning);
-ballotRouter.put("/:ballotID", isAdmin, BallotController.put);
-ballotRouter.get("/result/:ballotID", isAdmin, BallotController.getVoteResult);
 ballotRouter.get("/status/:ballotID", BallotController.getTotalVoteCount);
+
+ballotRouter.get("/result/:ballotID", isAdmin, BallotController.getVoteResult);
+ballotRouter.post("/", isAdmin, BallotController.add);
+ballotRouter.put("/:ballotID", isAdmin, BallotController.put);
+ballotRouter.delete("/", isAdmin, BallotController.delete);
 
 const tokenRouter = Router();
 baseRouter.use("/token", tokenRouter);
@@ -37,9 +39,13 @@ tokenRouter.post("/", isAdmin, TokenController.generate);
 
 const adminRouter = Router();
 baseRouter.use("/admin", adminRouter);
-adminRouter.post("/login", adminLoginLimiter, AdminController.login);
+adminRouter.post("/login", adminLoginLimiter, AdminController.login); // old login endpoint
 adminRouter.post("/", isAdmin, AdminController.add);
 adminRouter.delete("/", isAdmin, AdminController.delete);
+
+const authRouter = Router();
+baseRouter.use("/auth", authRouter);
+authRouter.post("/login", adminLoginLimiter, AuthController.login);
 
 // Export the base-router
 export default baseRouter;
