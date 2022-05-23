@@ -1,13 +1,17 @@
 import { NotFound, UnprocessableEntity } from "http-errors";
-import { VotingOption } from "../repositories/schemas";
+import { Ballot, VotingOption } from "../repositories/schemas";
 import { BallotService } from "../services/BallotService";
 import { AdminService } from "../services/AdminService";
 
 const ballotService = new BallotService();
 const adminService = new AdminService();
 
+type BallotInfo = Omit<Ballot, "createdBy">;
+
 export class BallotHandler {
-  public getBallots = ballotService.getBallots;
+  public async getBallots() {
+    return BallotHandler.convertBallots(await ballotService.getBallots());
+  }
 
   public async addBallot(
     running: boolean,
@@ -36,7 +40,7 @@ export class BallotHandler {
     const ballot = await ballotService.getRunningBallot();
     if (!ballot) throw new NotFound("There is no running ballot");
 
-    return ballot;
+    return BallotHandler.convertBallot(ballot);
   }
 
   public async updateBallot(
@@ -51,5 +55,14 @@ export class BallotHandler {
       throw new UnprocessableEntity("Not enough vote options");
 
     await ballotService.updateBallot(ballotID, running, question, options);
+  }
+
+  // dont expose admin username in response
+  private static convertBallot(ballot: Ballot): BallotInfo {
+    delete ballot.createdBy; // hella sus
+    return ballot;
+  }
+  private static convertBallots(ballots: Ballot[]): BallotInfo[] {
+    return ballots.map(BallotHandler.convertBallot);
   }
 }
