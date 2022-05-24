@@ -1,50 +1,13 @@
-import fetch from "node-fetch";
-import { secrets } from "../utils/secrets";
-import { Forbidden } from "http-errors";
 import { asyncHandler } from "../utils/AsyncHandler";
 import { NextFunction, Request } from "express";
+import { CaptchaHandler } from "../handler/CaptchaHandler";
 
-const url = "https://hcaptcha.com/siteverify";
+const captchaHandler = new CaptchaHandler();
 
 export const isCaptchaValid = asyncHandler(
   async (req: Request<{}, {}, {}>, res, next: NextFunction) => {
-    const captchaToken = req.headers["x-captcha"];
-
-    if (!captchaToken) throw new Forbidden("Captcha token missing");
-
-    const data = new URLSearchParams([
-      ["response", captchaToken.toString()],
-      ["secret", secrets.HCAPTCHA_SECRET],
-    ]);
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: data.toString(),
-    });
-
-    const jsonResponse = (await response.json()) as HCaptchaResponse;
-
-    if (!response.ok || !jsonResponse.success) {
-      if (jsonResponse["error-codes"]) {
-        console.error(
-          `Captcha token was not valid with reason: ${jsonResponse["error-codes"]}`
-        );
-      } else {
-        console.error(`Captcha API responded with: ${response.status}`);
-      }
-      throw new Forbidden("Captcha token was not valid");
-    }
-
+    const captchaToken = req.headers["x-captcha"] as string;
+    await captchaHandler.verify(captchaToken);
     next();
   }
 );
-
-interface HCaptchaResponse {
-  "error-codes": string[];
-  // quotes needed since "-" is an operator in ts and die HCaptcha API returns it like this (https://docs.hcaptcha.com/)
-  success: boolean;
-  challenge_ts: string;
-  hostname: string;
-  credit: boolean;
-}
