@@ -6,7 +6,7 @@ const jwtPublicKey = `-----BEGIN PUBLIC KEY-----\n${secrets.JWTPublicKey}\n-----
 const algorithm = "ES256";
 
 export class AuthService {
-  public decodeToken(token: string): JwtPayload {
+  public decodeJWT(token: string): JwtPayload {
     if (token.toLowerCase().startsWith("bearer"))
       token = token.slice("bearer".length);
 
@@ -16,7 +16,7 @@ export class AuthService {
     });
   }
 
-  public generateToken(username: string): string {
+  public generateJWT(username: string): string {
     return jwt.sign({ username }, jwtPrivateKey, {
       expiresIn: "1h",
       algorithm: algorithm,

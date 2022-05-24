@@ -11,24 +11,6 @@ export const adminCredsRaw = Joi.object().keys({
 });
 
 export default {
-  // old login endpoint
-  login: asyncHandler(
-    async (
-      req: Request<{}, {}, { username: string; password: string }>,
-      res
-    ) => {
-      Joi.assert(req.body, adminCredsRaw);
-      const accessToken = await adminHandler.login(
-        req.body.username,
-        req.body.password
-      );
-      res.json({
-        data: {
-          accessToken: accessToken,
-        },
-      });
-    }
-  ),
   add: asyncHandler(
     async (
       req: Request<{}, {}, { username: string; password: string }>,

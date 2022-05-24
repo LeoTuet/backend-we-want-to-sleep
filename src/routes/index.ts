@@ -39,7 +39,7 @@ tokenRouter.post("/", isAdmin, TokenController.generate);
 
 const adminRouter = Router();
 baseRouter.use("/admin", adminRouter);
-adminRouter.post("/login", adminLoginLimiter, AdminController.login); // old login endpoint
+adminRouter.post("/login", adminLoginLimiter, AuthController.login); // old login endpoint
 adminRouter.post("/", isAdmin, AdminController.add);
 adminRouter.delete("/", isAdmin, AdminController.delete);
 

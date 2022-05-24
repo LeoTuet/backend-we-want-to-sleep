@@ -24,8 +24,9 @@ export class VoteHandler {
 
     await Promise.all([tokenExists, ballotExists]).then(
       ([resTokenExists, resBallotExists]) => {
-        if (!resTokenExists) throw new Unauthorized("VoteToken not found");
-        if (!resBallotExists) throw new Forbidden("Ballot not found");
+        if (!resTokenExists) throw new Unauthorized("Invalid vote token");
+        if (!resBallotExists)
+          throw new Forbidden("Ballot with given id does not exist");
       }
     );
 
@@ -46,9 +47,9 @@ export class VoteHandler {
 
   public async getVote(token: string, ballotID: string): Promise<Vote> {
     if (!(await tokenService.checkIfTokenExists(token)))
-      throw new Unauthorized("Token not found");
+      throw new Unauthorized("Invalid vote token");
     if (!(await ballotService.checkIfBallotIDExists(ballotID)))
-      throw new NotFound("BallotID not found");
+      throw new NotFound("Ballot with given id does not exist");
     if (!(await voteService.checkIfAlreadyVoted(ballotID, token)))
       throw new NotFound("Not voted yet");
     return await voteService.getVote(ballotID, token);
@@ -56,7 +57,7 @@ export class VoteHandler {
 
   public async getVotes(ballotID: string): Promise<Vote[]> {
     if (!(await ballotService.checkIfBallotIDExists(ballotID)))
-      throw new NotFound("BallotID not found");
+      throw new NotFound("Ballot with given id does not exist");
     return await voteService.getVotes(ballotID);
   }
 

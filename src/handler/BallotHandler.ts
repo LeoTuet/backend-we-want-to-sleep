@@ -8,9 +8,18 @@ const adminService = new AdminService();
 
 type BallotInfo = Omit<Ballot, "createdBy">;
 
+// dont expose admin username in response
+const convertBallot = (ballot: Ballot): BallotInfo => {
+  delete ballot.createdBy; // hella sus
+  return ballot;
+};
+const convertBallots = (ballots: Ballot[]): BallotInfo[] => {
+  return ballots.map(convertBallot);
+};
+
 export class BallotHandler {
   public async getBallots() {
-    return BallotHandler.convertBallots(await ballotService.getBallots());
+    return convertBallots(await ballotService.getBallots());
   }
 
   public async addBallot(
@@ -40,7 +49,7 @@ export class BallotHandler {
     const ballot = await ballotService.getRunningBallot();
     if (!ballot) throw new NotFound("There is no running ballot");
 
-    return BallotHandler.convertBallot(ballot);
+    return convertBallot(ballot);
   }
 
   public async updateBallot(
@@ -55,14 +64,5 @@ export class BallotHandler {
       throw new UnprocessableEntity("Not enough vote options");
 
     await ballotService.updateBallot(ballotID, running, question, options);
-  }
-
-  // dont expose admin username in response
-  private static convertBallot(ballot: Ballot): BallotInfo {
-    delete ballot.createdBy; // hella sus
-    return ballot;
-  }
-  private static convertBallots(ballots: Ballot[]): BallotInfo[] {
-    return ballots.map(BallotHandler.convertBallot);
   }
 }

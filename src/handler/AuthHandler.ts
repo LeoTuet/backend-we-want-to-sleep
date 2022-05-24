@@ -12,7 +12,7 @@ export class AuthHandler {
 
     let decodedJwt: JwtPayload;
     try {
-      decodedJwt = authService.decodeToken(jwt);
+      decodedJwt = authService.decodeJWT(jwt);
     } catch (e) {
       throw new Forbidden(e.message);
     }
@@ -31,6 +31,6 @@ export class AuthHandler {
     if (!(await adminService.checkCredentials(username, password)))
       throw new Forbidden("Incorrect username or password");
 
-    return authService.generateToken(username);
+    return authService.generateJWT(username);
   }
 }
