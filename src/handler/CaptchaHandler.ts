@@ -8,7 +8,7 @@ const captchaService = new CaptchaService();
 export class CaptchaHandler {
   async verify(captchaToken: string) {
     if (!captchaToken) throw new Forbidden("Captcha token missing");
-    
+
     const jsonResponse = await captchaService
       .request(captchaToken)
       .catch((err) => {
