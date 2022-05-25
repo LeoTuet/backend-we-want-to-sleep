@@ -1,26 +1,25 @@
 import AdminRepository from "../repositories/AdminRepository";
-import {compare, hash} from "bcrypt";
-
+import { compare, hash } from "bcrypt";
 
 export class AdminService {
-
-  public async addAdmin(username: string, password: string) {
-    AdminRepository.addAdmin(
-      username,
-      await hash(password, 12)
-    )
-  };
-
   public deleteAdmin = AdminRepository.deleteAdmin;
 
-  public async checkIfPasswordCorrect(username: string, password: string): Promise<boolean> {
-    return await compare(
-      password,
-      (await AdminRepository.getAdmin(username)).passwordHash
-    )
+  public async addAdmin(username: string, password: string) {
+    await AdminRepository.addAdmin(username, await hash(password, 12));
+  }
+
+  public async checkCredentials(
+    username: string,
+    password: string
+  ): Promise<boolean> {
+    const admin = await AdminRepository.getAdmin(username);
+    if (!admin) return false;
+
+    return await compare(password, admin.passwordHash);
   }
 
   public async checkIfUsernameExists(username: string): Promise<boolean> {
-    return (await AdminRepository.getAdmin(username)) != null
+    const admin = await AdminRepository.getAdmin(username);
+    return admin != null;
   }
 }

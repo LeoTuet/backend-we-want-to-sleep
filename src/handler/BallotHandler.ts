@@ -1,12 +1,27 @@
 import { NotFound, UnprocessableEntity } from "http-errors";
-import { VotingOption } from "../repositories/schemas";
+import { Ballot, VotingOption } from "../repositories/schemas";
 import { BallotService } from "../services/BallotService";
 import { AdminService } from "../services/AdminService";
 
 const ballotService = new BallotService();
 const adminService = new AdminService();
 
+type BallotInfo = Omit<Ballot, "createdBy">;
+
+// dont expose admin username in response
+const convertBallot = (ballot: Ballot): BallotInfo => {
+  delete ballot.createdBy; // hella sus
+  return ballot;
+};
+const convertBallots = (ballots: Ballot[]): BallotInfo[] => {
+  return ballots.map(convertBallot);
+};
+
 export class BallotHandler {
+  public async getBallots() {
+    return convertBallots(await ballotService.getBallots());
+  }
+
   public async addBallot(
     running: boolean,
     createdBy: string,
@@ -30,17 +45,12 @@ export class BallotHandler {
     await ballotService.deleteBallot(ballotID);
   }
 
-  public getBallots = ballotService.getBallots;
-
   public async getRunningBallot() {
     const ballot = await ballotService.getRunningBallot();
+    if (!ballot) throw new NotFound("There is no running ballot");
 
-    if (!ballot) {
-      throw new NotFound("There is no running ballot");
-    }
-
-    return ballot;
-  };
+    return convertBallot(ballot);
+  }
 
   public async updateBallot(
     ballotID: string,

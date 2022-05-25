@@ -1,35 +1,15 @@
-import {NextFunction, Request} from "express";
-import {Forbidden, Unauthorized} from "http-errors";
-import JWTs from "../utils/JWTs";
-import {asyncHandler} from "../utils/AsyncHandler";
-import {JwtPayload, TokenExpiredError} from "jsonwebtoken";
-import {AdminService} from "../services/AdminService";
+import { NextFunction, Request } from "express";
+import { asyncHandler } from "../utils/AsyncHandler";
+import { AuthHandler } from "../handler/AuthHandler";
 
-const adminService = new AdminService()
+const authHandler = new AuthHandler();
 
-export const isAdmin = asyncHandler(async (req: Request<{}, {}, {}>, res, next: NextFunction) => {
-  let jwt = req.headers.authorization
-  let decodedJwt: JwtPayload
+export const isAdmin = asyncHandler(
+  async (req: Request<{}, {}, {}>, res, next: NextFunction) => {
+    const decoded = await authHandler.authenticate(req.headers.authorization);
 
-  if (!jwt)
-    throw new Unauthorized("AccessToken missing")
-
-  if (jwt.toLowerCase().startsWith('bearer'))
-    jwt = jwt.slice('bearer'.length).trim();
-
-  try {
-    decodedJwt = JWTs.verifyAndDecodeAccessToken(jwt)
-  } catch (e) {
-    if (e instanceof TokenExpiredError) {
-      throw new Unauthorized("AccessToken expired")
-    } else {
-      throw new Unauthorized("AccessToken invalid")
-    }
+    res.locals.authenticated = true;
+    res.locals.username = decoded.payload.username;
+    next();
   }
-  if (!await adminService.checkIfUsernameExists(decodedJwt.payload.username))
-    throw new Forbidden()
-
-  res.locals.authenticated = true
-  res.locals.username = decodedJwt.payload.username
-  next()
-})
+);
