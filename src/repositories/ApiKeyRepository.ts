@@ -2,10 +2,17 @@ import { getCollection } from "./connectToDB";
 import { ApiKey } from "./schemas";
 
 export default {
-  async addApiKey(name: string, key: string) {
+  async addApiKey(
+    name: string,
+    keyHash: string,
+    createdBy: string,
+    createdAt: Date
+  ) {
     const result = await getCollection("api-key").insertOne({
       name,
-      key,
+      keyHash,
+      createdBy,
+      createdAt,
     });
     if (!result.acknowledged) throw Error("Api key could not be created");
   },
@@ -15,8 +22,8 @@ export default {
     if (result.deletedCount !== 1) throw Error("Api key could not be deleted");
   },
 
-  async getApiKeyByKey(key: string): Promise<ApiKey> {
-    return await getCollection<ApiKey>("api-key").findOne({ key });
+  async getApiKeyByKeyHash(keyHash: string): Promise<ApiKey> {
+    return await getCollection<ApiKey>("api-key").findOne({ keyHash });
   },
 
   async getApiKeyByName(name: string): Promise<ApiKey> {

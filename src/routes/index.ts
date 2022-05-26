@@ -49,7 +49,7 @@ baseRouter.use("/auth", authRouter);
 authRouter.post("/login", adminLoginLimiter, AuthController.login);
 
 const apiKeyRouter = Router();
-baseRouter.use("/apiKey", apiKeyRouter);
+baseRouter.use("/api-key", apiKeyRouter);
 apiKeyRouter.post("/", isAdmin, APIKeyController.add);
 apiKeyRouter.delete("/", isAdmin, APIKeyController.delete);
 

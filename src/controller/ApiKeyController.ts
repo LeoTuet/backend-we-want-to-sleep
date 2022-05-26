@@ -5,24 +5,23 @@ import { ApiKeyHandler } from "../handler/ApiKeyHandler";
 
 const apiKeyHandler = new ApiKeyHandler();
 
-export const apiKeyRaw = Joi.object().keys({
-  name: Joi.string().required().alphanum(),
-  key: Joi.string().required(),
-});
-
 export default {
-  add: asyncHandler(
-    async (req: Request<{}, {}, { name: string; key: string }>, res) => {
-      Joi.assert(req.body, apiKeyRaw);
+  add: asyncHandler(async (req: Request<{}, {}, { name: string }>, res) => {
+    Joi.assert(req.body.name, Joi.string().required().alphanum());
 
-      await apiKeyHandler.addApiKey(req.body.name, req.body.key);
-      res.json({
-        data: {
-          added: req.body.name,
+    const apiKey = await apiKeyHandler.addApiKey(
+      req.body.name,
+      req.res.locals.username
+    );
+    res.json({
+      data: {
+        added: {
+          name: req.body.name,
+          key: apiKey,
         },
-      });
-    }
-  ),
+      },
+    });
+  }),
   delete: asyncHandler(async (req: Request<{}, {}, { name: string }>, res) => {
     Joi.assert(req.body.name, Joi.string().required().alphanum());
 

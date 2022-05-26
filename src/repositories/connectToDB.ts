@@ -25,6 +25,7 @@ async function prepareDatabase() {
     { token: 1, ballot: 1 },
     { unique: true }
   );
+  await getCollection("api-key").createIndex({ name: 1 }, { unique: true });
   await getCollection("token").createIndex({ token: 1 }, { unique: true });
   await getCollection("admin").createIndex({ username: 1 }, { unique: true });
 }

@@ -38,5 +38,7 @@ export interface Admin {
 export interface ApiKey {
   _id: string;
   name: string;
-  key: string;
+  keyHash: string;
+  createdBy: string;
+  createdAt: Date;
 }
