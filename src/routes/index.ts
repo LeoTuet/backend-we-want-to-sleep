@@ -4,7 +4,7 @@ import BallotController from "../controller/BallotController";
 import TokenController from "../controller/TokenController";
 import AdminController from "../controller/AdminController";
 import AuthController from "../controller/AuthController";
-import APIKeyController from "../controller/APIKeyController";
+import APIKeyController from "../controller/ApiKeyController";
 import { isAdmin } from "../middleware/AuthMiddleware";
 import { isCaptchaValid } from "../middleware/CaptchaMiddleware";
 import {
