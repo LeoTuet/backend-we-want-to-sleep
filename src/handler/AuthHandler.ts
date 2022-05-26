@@ -25,6 +25,12 @@ export class AuthHandler {
     return decodedJwt;
   }
 
+  async authenticateWithApiKey(key: string): Promise<boolean> {
+    if (!(await authService.checkIfApiKeyExists(key)))
+      throw new Unauthorized("API key is not valid");
+    return true;
+  }
+
   public async login(username: string, password: string): Promise<string> {
     if (!username || !password)
       throw new Unauthorized("Missing username or password");

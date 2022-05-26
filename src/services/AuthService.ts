@@ -1,5 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { secrets } from "../utils/secrets";
+import ApiKeyRepository from "../repositories/ApiKeyRepository"
 
 const jwtPrivateKey = `-----BEGIN EC PRIVATE KEY-----\n${secrets.JWTPrivateKey}\n-----END EC PRIVATE KEY-----`;
 const jwtPublicKey = `-----BEGIN PUBLIC KEY-----\n${secrets.JWTPublicKey}\n-----END PUBLIC KEY-----`;
@@ -21,5 +22,10 @@ export class AuthService {
       expiresIn: "1h",
       algorithm: algorithm,
     });
+  }
+
+  public async checkIfApiKeyExists(key: string): Promise<boolean> {
+    const apiKey = await ApiKeyRepository.getApiKeyByKey(key);
+    return apiKey != null;
   }
 }

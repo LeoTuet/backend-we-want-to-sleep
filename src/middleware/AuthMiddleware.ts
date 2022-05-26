@@ -13,3 +13,10 @@ export const isAdmin = asyncHandler(
     next();
   }
 );
+
+export const hasValidApiKey = asyncHandler(
+  async (req: Request<{}, {}, {}>, res, next: NextFunction) => {
+    await authHandler.authenticateWithApiKey(req.headers["x-api-key"] as string);
+    next();
+  }
+);
