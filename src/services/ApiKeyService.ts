@@ -2,11 +2,18 @@ import sha256 from "crypto-js/sha256";
 import ApiKeyRepository from "../repositories/ApiKeyRepository";
 import { nanoid } from "nanoid";
 
+function generateApiKey() {
+  return nanoid(20);
+}
+
 export class ApiKeyService {
   public async addApiKey(name: string, createdBy: string) {
-    const key = this.generateApiKey();
+    const key = generateApiKey();
 
-    if (this.checkIfApiKeyExists(key)) this.addApiKey(name, createdBy);
+    if (await this.checkIfApiKeyExists(key)) {
+      await this.addApiKey(name, createdBy);
+      return;
+    }
 
     const keyHash = sha256(key).toString();
     const createdAt = new Date();
@@ -16,10 +23,6 @@ export class ApiKeyService {
   }
 
   public deleteApiKey = ApiKeyRepository.deleteApiKey;
-
-  public generateApiKey() {
-    return nanoid(20);
-  }
 
   public async checkIfApiKeyNameExists(name: string): Promise<boolean> {
     const apiKey = await ApiKeyRepository.getApiKeyByName(name);

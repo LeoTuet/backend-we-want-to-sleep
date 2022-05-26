@@ -1,11 +1,11 @@
-import { ApiKeyService } from './../services/ApiKeyService';
+import { ApiKeyService } from "./../services/ApiKeyService";
 import { Forbidden, Unauthorized } from "http-errors";
 import { JwtPayload } from "jsonwebtoken";
 import { AdminService } from "../services/AdminService";
 import { AuthService } from "../services/AuthService";
 
 const authService = new AuthService();
-const apiKeyService = new ApiKeyService()
+const apiKeyService = new ApiKeyService();
 const adminService = new AdminService();
 
 export class AuthHandler {
@@ -27,10 +27,9 @@ export class AuthHandler {
     return decodedJwt;
   }
 
-  async authenticateWithApiKey(key: string): Promise<boolean> {
+  async authenticateWithApiKey(key: string) {
     if (!(await apiKeyService.checkIfApiKeyExists(key)))
       throw new Unauthorized("API key is not valid");
-    return true;
   }
 
   public async login(username: string, password: string): Promise<string> {
