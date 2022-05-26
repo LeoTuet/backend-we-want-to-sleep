@@ -4,6 +4,7 @@ import BallotController from "../controller/BallotController";
 import TokenController from "../controller/TokenController";
 import AdminController from "../controller/AdminController";
 import AuthController from "../controller/AuthController";
+import MetricsController from "../controller/MetricsController";
 import { isAdmin } from "../middleware/AuthMiddleware";
 import { isCaptchaValid } from "../middleware/CaptchaMiddleware";
 import {
@@ -46,6 +47,10 @@ adminRouter.delete("/", isAdmin, AdminController.delete);
 const authRouter = Router();
 baseRouter.use("/auth", authRouter);
 authRouter.post("/login", adminLoginLimiter, AuthController.login);
+
+const metricsRouter = Router();
+baseRouter.use("/metrics", metricsRouter);
+metricsRouter.get("/", MetricsController.getAllMetrics);
 
 // Export the base-router
 export default baseRouter;

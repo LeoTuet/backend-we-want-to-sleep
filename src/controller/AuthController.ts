@@ -1,3 +1,4 @@
+import { loginCounter } from "./../utils/Metrics";
 import { Request } from "express";
 import Joi from "joi";
 import { asyncHandler } from "../utils/AsyncHandler";
@@ -16,6 +17,7 @@ export default {
       req: Request<{}, {}, { username: string; password: string }>,
       res
     ) => {
+      loginCounter.inc();
       Joi.assert(req.body, loginSchema);
       const accessToken = await authHandler.login(
         req.body.username,
