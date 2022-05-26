@@ -62,6 +62,7 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "command-line-args": "^5.2.1",
+    "crypto-js": "^4.1.1",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.0",
