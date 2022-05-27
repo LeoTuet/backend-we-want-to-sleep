@@ -29,4 +29,8 @@ export default {
   async getApiKeyByName(name: string): Promise<ApiKey> {
     return await getCollection<ApiKey>("api-key").findOne({ name });
   },
+
+  async getApiKeys(): Promise<ApiKey[]> {
+    return await getCollection<ApiKey>("api-key").find().toArray();
+  },
 };

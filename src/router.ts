@@ -1,16 +1,16 @@
 import { Router } from "express";
-import VoteController from "../controller/VoteController";
-import BallotController from "../controller/BallotController";
-import TokenController from "../controller/TokenController";
-import AdminController from "../controller/AdminController";
-import AuthController from "../controller/AuthController";
-import APIKeyController from "../controller/ApiKeyController";
-import { isAdmin } from "../middleware/AuthMiddleware";
-import { isCaptchaValid } from "../middleware/CaptchaMiddleware";
+import VoteController from "./controller/VoteController";
+import BallotController from "./controller/BallotController";
+import TokenController from "./controller/TokenController";
+import AdminController from "./controller/AdminController";
+import AuthController from "./controller/AuthController";
+import APIKeyController from "./controller/ApiKeyController";
+import { isAdmin } from "./middleware/AuthMiddleware";
+import { isCaptchaValid } from "./middleware/CaptchaMiddleware";
 import {
   adminLoginLimiter,
   defaultLimiter,
-} from "../middleware/RateLimitMiddleware";
+} from "./middleware/RateLimitMiddleware";
 
 const baseRouter = Router();
 baseRouter.use(defaultLimiter);
@@ -50,6 +50,7 @@ authRouter.post("/login", adminLoginLimiter, AuthController.login);
 
 const apiKeyRouter = Router();
 baseRouter.use("/api-key", apiKeyRouter);
+apiKeyRouter.get("/", isAdmin, APIKeyController.getApiKeys);
 apiKeyRouter.post("/", isAdmin, APIKeyController.add);
 apiKeyRouter.delete("/", isAdmin, APIKeyController.delete);
 

@@ -24,6 +24,8 @@ export class ApiKeyService {
 
   public deleteApiKey = ApiKeyRepository.deleteApiKey;
 
+  public getApiKeys = ApiKeyRepository.getApiKeys;
+
   public async checkIfApiKeyNameExists(name: string): Promise<boolean> {
     const apiKey = await ApiKeyRepository.getApiKeyByName(name);
     return apiKey != null;

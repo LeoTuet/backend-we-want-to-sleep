@@ -15,10 +15,8 @@ export default {
     );
     res.json({
       data: {
-        added: {
-          name: req.body.name,
-          key: apiKey,
-        },
+        name: req.body.name,
+        key: apiKey,
       },
     });
   }),
@@ -28,4 +26,12 @@ export default {
     await apiKeyHandler.deleteApiKey(req.body.name);
     res.status(204).send();
   }),
+  getApiKeys: asyncHandler(
+    async (req: Request<{}, {}, { name: string }>, res) => {
+      const apiKeys = await apiKeyHandler.getApiKeys();
+      res.json({
+        data: apiKeys,
+      });
+    }
+  ),
 };
