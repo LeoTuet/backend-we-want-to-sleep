@@ -1,6 +1,6 @@
 import compression from "compression";
 import express, { Request, Response, NextFunction } from "express";
-import baseRouter from "./routes";
+import baseRouter from "./router";
 import { isHttpError } from "http-errors";
 import Joi from "joi";
 

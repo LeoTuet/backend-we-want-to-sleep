@@ -34,3 +34,11 @@ export interface Admin {
   username: string;
   passwordHash: string;
 }
+
+export interface ApiKey {
+  _id: string;
+  name: string;
+  keyHash: string;
+  createdBy: string;
+  createdAt: Date;
+}
