@@ -6,7 +6,9 @@ const authHandler = new AuthHandler();
 
 export const isAdmin = asyncHandler(
   async (req: Request<{}, {}, {}>, res, next: NextFunction) => {
-    const decoded = await authHandler.authenticate(req.headers.authorization);
+    const decoded = await authHandler.authenticateWithJwt(
+      req.headers.authorization
+    );
 
     res.locals.authenticated = true;
     res.locals.username = decoded.payload.username;
@@ -16,7 +18,9 @@ export const isAdmin = asyncHandler(
 
 export const hasValidApiKey = asyncHandler(
   async (req: Request<{}, {}, {}>, res, next: NextFunction) => {
-    await authHandler.authenticateWithApiKey(req.headers["x-api-key"] as string);
+    await authHandler.authenticateWithApiKey(
+      req.headers["x-api-key"] as string
+    );
     next();
   }
 );

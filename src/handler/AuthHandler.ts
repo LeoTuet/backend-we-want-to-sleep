@@ -1,4 +1,4 @@
-import { ApiKeyService } from "./../services/ApiKeyService";
+import { ApiKeyService } from "../services/ApiKeyService";
 import { Forbidden, Unauthorized } from "http-errors";
 import { JwtPayload } from "jsonwebtoken";
 import { AdminService } from "../services/AdminService";
@@ -9,7 +9,7 @@ const apiKeyService = new ApiKeyService();
 const adminService = new AdminService();
 
 export class AuthHandler {
-  public async authenticate(jwt: string): Promise<JwtPayload> {
+  public async authenticateWithJwt(jwt: string): Promise<JwtPayload> {
     if (!jwt) throw new Unauthorized("AccessToken missing");
 
     let decodedJwt: JwtPayload;

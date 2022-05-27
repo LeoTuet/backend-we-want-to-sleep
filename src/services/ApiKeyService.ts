@@ -3,17 +3,17 @@ import ApiKeyRepository from "../repositories/ApiKeyRepository";
 import { nanoid } from "nanoid";
 
 function generateApiKey() {
-  return nanoid(20);
+  return nanoid(32);
 }
 
 export class ApiKeyService {
-  public async addApiKey(name: string, createdBy: string) {
-    const key = generateApiKey();
-
-    if (await this.checkIfApiKeyExists(key)) {
-      await this.addApiKey(name, createdBy);
-      return;
-    }
+  public async createUniqueApiKey(
+    name: string,
+    createdBy: string
+  ): Promise<string> {
+    let key;
+    do key = generateApiKey();
+    while (await this.checkIfApiKeyExists(key));
 
     const keyHash = sha256(key).toString();
     const createdAt = new Date();
