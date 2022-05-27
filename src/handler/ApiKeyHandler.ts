@@ -13,6 +13,7 @@ const convertApiKey = (key: ApiKey): ApiKeyInfo => {
   delete key._id;
   return key;
 };
+
 const convertApiKeys = (keys: ApiKey[]): ApiKeyInfo[] => {
   return keys.map(convertApiKey);
 };

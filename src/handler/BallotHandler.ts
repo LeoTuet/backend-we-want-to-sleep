@@ -13,6 +13,7 @@ const convertBallot = (ballot: Ballot): BallotInfo => {
   delete ballot.createdBy; // hella sus
   return ballot;
 };
+
 const convertBallots = (ballots: Ballot[]): BallotInfo[] => {
   return ballots.map(convertBallot);
 };
