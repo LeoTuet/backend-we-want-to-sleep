@@ -8,9 +8,9 @@ import { VoteHandler } from "../handler/VoteHandler";
 const ballotHandler = new BallotHandler();
 const voteHandler = new VoteHandler();
 
-type CreationBallot = Omit<Ballot, "_id">;
+type CreationBallot = Omit<Ballot, "_id" | "tokensUsed" | "createdBy">;
 
-type UpdateBallot = Omit<CreationBallot, "createdBy">;
+type UpdateBallot = CreationBallot;
 
 const createBallotSchema = Joi.object().keys({
   running: Joi.boolean().required().strict(),

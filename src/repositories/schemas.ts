@@ -2,7 +2,6 @@ import { ObjectId } from "mongodb";
 
 export interface Vote {
   _id: string;
-  token: string;
   ballotID: ObjectId;
   vote: string;
   votedAt: Date;
@@ -14,6 +13,7 @@ export interface Ballot {
   running: boolean;
   question: string;
   options: VotingOption[];
+  tokensUsed: string[];
 }
 
 export interface Token {

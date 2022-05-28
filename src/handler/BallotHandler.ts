@@ -8,9 +8,10 @@ const adminService = new AdminService();
 
 type BallotInfo = Omit<Ballot, "createdBy">;
 
-// dont expose admin username in response
+// dont expose admin username or tokens in response
 const convertBallot = (ballot: Ballot): BallotInfo => {
   delete ballot.createdBy; // hella sus
+  delete ballot.tokensUsed;
   return ballot;
 };
 

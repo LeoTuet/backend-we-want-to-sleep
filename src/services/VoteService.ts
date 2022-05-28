@@ -1,7 +1,6 @@
 import { Vote } from "../repositories/schemas";
 import BallotRepository from "../repositories/BallotRepository";
 import VoteRepository from "../repositories/VoteRepository";
-import { ObjectId } from "mongodb";
 
 export interface VoteResult {
   questionIdentifier: string;
@@ -15,24 +14,24 @@ export interface TotalVoteCount {
 
 export class VoteService {
   public async saveVote(ballotID: string, token: string, vote: string) {
-    const ballot = await BallotRepository.getBallot(ballotID);
-    await VoteRepository.addVote(token, ballot._id, vote, new Date());
+    await VoteRepository.addVote(ballotID, vote, new Date());
+    await BallotRepository.setTokenAsUsed(ballotID, token);
   }
 
-  public async getVote(ballotID: string, token: string): Promise<Vote> {
-    return await VoteRepository.getVote(token, new ObjectId(ballotID));
-  }
-
-  public async getVotes(ballotID: string): Promise<Vote[]> {
-    return await VoteRepository.getVotes(new ObjectId(ballotID));
+  public async getVotesForBallot(ballotID: string): Promise<Vote[]> {
+    // getVotesForBallot does not work for me anymore :(  hours spent: 1
+    // return await VoteRepository.getVotesForBallot(new ObjectId(ballotID));
+    return (await VoteRepository.getVotes()).filter(
+      (v) => v.ballotID.toString() == ballotID
+    );
   }
 
   public async checkIfAlreadyVoted(
     ballotID: string,
     token: string
   ): Promise<boolean> {
-    const vote = await this.getVote(ballotID, token);
-    return vote != null;
+    const ballot = await BallotRepository.getBallot(ballotID);
+    return ballot.tokensUsed.includes(token);
   }
 
   public async checkIfVoteOptionValid(
@@ -43,15 +42,15 @@ export class VoteService {
     return ballot.options.map((option) => option.identifier).includes(vote);
   }
 
-  public async countVotes(ballotID: string): Promise<TotalVoteCount> {
-    const votes = await this.getVotes(ballotID);
+  public async countVotesForBallot(ballotID: string): Promise<TotalVoteCount> {
+    const votes = await this.getVotesForBallot(ballotID);
     return {
       count: votes.length,
     };
   }
 
   public async getVoteResult(ballotID: string): Promise<VoteResult[]> {
-    const votes = await this.getVotes(ballotID);
+    const votes = await this.getVotesForBallot(ballotID);
     const ballot = await BallotRepository.getBallot(ballotID);
     const voteOptions = ballot.options;
 

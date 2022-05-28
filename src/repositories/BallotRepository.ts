@@ -14,6 +14,7 @@ export default {
       createdBy,
       question,
       options,
+      tokensUsed: [],
     });
 
     if (!result.acknowledged) throw Error("Ballot could not be created");
@@ -60,5 +61,17 @@ export default {
     );
 
     if (!result.acknowledged) throw Error("Ballot could not be updated");
+  },
+  async setTokenAsUsed(ballotId: string, token: string): Promise<void> {
+    const result = await getCollection("ballot").updateOne(
+      { _id: new ObjectId(ballotId) },
+      {
+        $push: {
+          tokensUsed: token,
+        },
+      }
+    );
+
+    if (!result.acknowledged) throw Error("Token could not be set as used");
   },
 };
