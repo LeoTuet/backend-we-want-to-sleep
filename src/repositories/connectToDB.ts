@@ -21,10 +21,6 @@ export const getCollection = <Type = any>(name: string) => {
 };
 
 async function prepareDatabase() {
-  await getCollection("vote").createIndex(
-    { token: 1, ballot: 1 },
-    { unique: true }
-  );
   await getCollection("api-key").createIndex(
     { name: 1, keyHash: 1 },
     { unique: true }

@@ -19,19 +19,14 @@ export class VoteService {
   }
 
   public async getVotesForBallot(ballotID: string): Promise<Vote[]> {
-    // getVotesForBallot does not work for me anymore :(  hours spent: 1
-    // return await VoteRepository.getVotesForBallot(new ObjectId(ballotID));
-    return (await VoteRepository.getVotes()).filter(
-      (v) => v.ballotID.toString() == ballotID
-    );
+    return await VoteRepository.getVotesForBallot(ballotID);
   }
 
   public async checkIfAlreadyVoted(
     ballotID: string,
     token: string
   ): Promise<boolean> {
-    const ballot = await BallotRepository.getBallot(ballotID);
-    return ballot.tokensUsed.includes(token);
+    return BallotRepository.checkIfTokenIsUsed(ballotID, token);
   }
 
   public async checkIfVoteOptionValid(
