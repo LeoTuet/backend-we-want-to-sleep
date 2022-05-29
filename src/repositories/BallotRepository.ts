@@ -74,4 +74,14 @@ export default {
 
     if (!result.acknowledged) throw Error("Token could not be set as used");
   },
+  async checkIfTokenIsUsed(ballotId: string, token: string): Promise<boolean> {
+    return (
+      (await getCollection("ballot")
+        .find({
+          _id: new ObjectId(ballotId),
+          tokensUsed: { $elemMatch: { $eq: token } },
+        })
+        .count()) > 0
+    );
+  },
 };

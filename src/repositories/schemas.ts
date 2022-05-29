@@ -1,8 +1,6 @@
-import { ObjectId } from "mongodb";
-
 export interface Vote {
   _id: string;
-  ballotID: ObjectId;
+  ballotID: string;
   vote: string;
   votedAt: Date;
 }
