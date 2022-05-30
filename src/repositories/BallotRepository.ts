@@ -62,6 +62,18 @@ export default {
 
     if (!result.acknowledged) throw Error("Ballot could not be updated");
   },
+  async updateBallotRunning(ballotID: string, running: boolean): Promise<void> {
+    const result = await getCollection("ballot").updateOne(
+      { _id: new ObjectId(ballotID) },
+      {
+        $set: {
+          running,
+        },
+      }
+    );
+
+    if (!result.acknowledged) throw Error("Ballot could not be updated");
+  },
   async setTokenAsUsed(ballotId: string, token: string): Promise<void> {
     const result = await getCollection("ballot").updateOne(
       { _id: new ObjectId(ballotId) },

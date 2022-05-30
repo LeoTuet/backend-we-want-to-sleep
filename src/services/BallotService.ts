@@ -1,19 +1,49 @@
 import BallotRepository from "../repositories/BallotRepository";
+import { VotingOption } from "../repositories/schemas";
 
 export class BallotService {
-  public addBallot = BallotRepository.addBallot;
+  getBallots = BallotRepository.getBallots;
 
-  public getBallots = BallotRepository.getBallots;
+  getBallot = BallotRepository.getBallot;
 
-  public getBallot = BallotRepository.getBallot;
+  deleteBallot = BallotRepository.deleteBallot;
 
-  public deleteBallot = BallotRepository.deleteBallot;
+  getRunningBallot = BallotRepository.getRunningBallot;
 
-  public updateBallot = BallotRepository.updateBallot;
+  async addBallot(
+    running: boolean,
+    createdBy: string,
+    question: string,
+    options: VotingOption[]
+  ) {
+    if (running) {
+      const runningBallot = await this.getRunningBallot();
+      if (runningBallot != null) {
+        const runningBallotId = runningBallot._id.toString();
+        await BallotRepository.updateBallotRunning(runningBallotId, false);
+      }
+    }
+    await BallotRepository.addBallot(running, createdBy, question, options);
+  }
 
-  public getRunningBallot = BallotRepository.getRunningBallot;
+  async updateBallot(
+    ballotID: string,
+    running: boolean,
+    question: string,
+    options: VotingOption[]
+  ) {
+    if (running) {
+      const runningBallot = await this.getRunningBallot();
+      if (runningBallot != null) {
+        const runningBallotId = runningBallot._id.toString();
+        if (ballotID != runningBallotId)
+          await BallotRepository.updateBallotRunning(runningBallotId, false);
+      }
+    }
+    await BallotRepository.updateBallot(ballotID, running, question, options);
+  }
 
-  public async checkIfBallotIDExists(ballotID: string): Promise<boolean> {
+  async checkIfBallotIDExists(ballotID: string): Promise<boolean> {
     const ballot = await this.getBallot(ballotID);
     return ballot != null;
   }
