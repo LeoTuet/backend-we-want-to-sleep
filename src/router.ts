@@ -7,13 +7,13 @@ import AuthController from "./controller/AuthController";
 import APIKeyController from "./controller/ApiKeyController";
 import { isAdmin } from "./middleware/AuthMiddleware";
 import { isCaptchaValid } from "./middleware/CaptchaMiddleware";
-import {
-  adminLoginLimiter,
-  defaultLimiter,
-} from "./middleware/RateLimitMiddleware";
+// import {
+//   adminLoginLimiter,
+//   defaultLimiter,
+// } from "./middleware/RateLimitMiddleware";
 
 const baseRouter = Router();
-baseRouter.use(defaultLimiter);
+// baseRouter.use(defaultLimiter);
 
 // User-route
 const voteRouter = Router();
@@ -40,13 +40,13 @@ tokenRouter.post("/", isAdmin, TokenController.generate);
 
 const adminRouter = Router();
 baseRouter.use("/admin", adminRouter);
-adminRouter.post("/login", adminLoginLimiter, AuthController.login); // old login endpoint
+adminRouter.post("/login", /*adminLoginLimiter,*/ AuthController.login); // old login endpoint
 adminRouter.post("/", isAdmin, AdminController.add);
 adminRouter.delete("/", isAdmin, AdminController.delete);
 
 const authRouter = Router();
 baseRouter.use("/auth", authRouter);
-authRouter.post("/login", adminLoginLimiter, AuthController.login);
+authRouter.post("/login", /*adminLoginLimiter,*/ AuthController.login);
 
 const apiKeyRouter = Router();
 baseRouter.use("/api-key", apiKeyRouter);
