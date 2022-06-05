@@ -31,7 +31,7 @@ ballotRouter.get("/status/:ballotID", BallotController.getTotalVoteCount);
 ballotRouter.get("/result/:ballotID", isAdmin, BallotController.getVoteResult);
 ballotRouter.post("/", isAdmin, BallotController.add);
 ballotRouter.put("/:ballotID", isAdmin, BallotController.put);
-ballotRouter.delete("/", isAdmin, BallotController.delete);
+ballotRouter.delete("/:ballotID", isAdmin, BallotController.delete);
 
 const tokenRouter = Router();
 baseRouter.use("/token", tokenRouter);
