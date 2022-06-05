@@ -97,14 +97,10 @@ async function checkIfTokenIsUsed(
   ballotId: string,
   token: string
 ): Promise<boolean> {
-  return (
-    (await getCollection("ballot")
-      .find({
-        _id: new ObjectId(ballotId),
-        tokensUsed: { $elemMatch: { $eq: token } },
-      })
-      .count()) > 0
-  );
+  return await getCollection("ballot").findOne({
+    _id: new ObjectId(ballotId),
+    tokensUsed: { $elemMatch: { $eq: token } },
+  });
 }
 
 export default {
