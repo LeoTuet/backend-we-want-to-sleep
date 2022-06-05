@@ -12,7 +12,7 @@ type CreationBallot = Omit<Ballot, "_id" | "tokensUsed" | "createdBy">;
 
 type UpdateBallot = CreationBallot;
 
-const createBallotSchema = Joi.object().keys({
+const creationBallotKeys = {
   running: Joi.boolean().required().strict(),
   question: Joi.string().required(),
   options: Joi.array()
@@ -23,7 +23,15 @@ const createBallotSchema = Joi.object().keys({
         label: Joi.string().required(),
       })
     ),
-});
+};
+
+const updateBallotKeys = {
+  ...creationBallotKeys,
+  _id: Joi.string().length(24).required(),
+};
+
+const createBallotSchema = Joi.object().keys(creationBallotKeys);
+const updateBallotSchema = Joi.object().keys(updateBallotKeys);
 
 const ballotIdSchema = Joi.object().keys({
   ballotID: Joi.string().length(24).required(),
@@ -44,32 +52,34 @@ export default {
       res
     ) => {
       Joi.assert(req.body, createBallotSchema);
-      await ballotHandler.addBallot(
+      const ballot = await ballotHandler.addBallot(
         req.body.running,
         req.res.locals.username,
         req.body.question,
         req.body.options
       );
-      res.status(204).send();
+      res.json({ data: ballot });
     }
   ),
 
-  delete: asyncHandler(async (req: Request<{}, {}, { id: string }>, res) => {
-    Joi.assert(req.params, ballotIdSchema);
-    await ballotHandler.deleteBallot(req.body.id);
-    res.status(204).send();
-  }),
+  delete: asyncHandler(
+    async (req: Request<{ ballotID: string }, {}, {}>, res) => {
+      Joi.assert(req.params, ballotIdSchema);
+      await ballotHandler.deleteBallot(req.params.ballotID);
+      res.status(204).send();
+    }
+  ),
   put: asyncHandler(
     async (req: Request<{ ballotID: string }, {}, UpdateBallot>, res) => {
       Joi.assert(req.params, ballotIdSchema);
-      Joi.assert(req.body, createBallotSchema);
-      await ballotHandler.updateBallot(
+      Joi.assert(req.body, updateBallotSchema);
+      const ballot = await ballotHandler.updateBallot(
         req.params.ballotID,
         req.body.running,
         req.body.question,
         req.body.options
       );
-      res.status(204).send();
+      res.json({ data: ballot });
     }
   ),
   getVoteResult: asyncHandler(

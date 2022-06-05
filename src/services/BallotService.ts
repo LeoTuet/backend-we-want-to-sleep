@@ -43,6 +43,11 @@ export class BallotService {
     await BallotRepository.updateBallot(ballotID, running, question, options);
   }
 
+  async checkIfBallotRunning(ballotID: string): Promise<boolean> {
+    const ballot = await this.getBallot(ballotID);
+    return ballot.running;
+  }
+
   async checkIfBallotIDExists(ballotID: string): Promise<boolean> {
     const ballot = await this.getBallot(ballotID);
     return ballot != null;
