@@ -44,13 +44,13 @@ export default {
       res
     ) => {
       Joi.assert(req.body, createBallotSchema);
-      await ballotHandler.addBallot(
+      const ballot = await ballotHandler.addBallot(
         req.body.running,
         req.res.locals.username,
         req.body.question,
         req.body.options
       );
-      res.status(204).send();
+      res.json({ data: ballot });
     }
   ),
 
@@ -63,13 +63,13 @@ export default {
     async (req: Request<{ ballotID: string }, {}, UpdateBallot>, res) => {
       Joi.assert(req.params, ballotIdSchema);
       Joi.assert(req.body, createBallotSchema);
-      await ballotHandler.updateBallot(
+      const ballot = await ballotHandler.updateBallot(
         req.params.ballotID,
         req.body.running,
         req.body.question,
         req.body.options
       );
-      res.status(204).send();
+      res.json({ data: ballot });
     }
   ),
   getVoteResult: asyncHandler(
