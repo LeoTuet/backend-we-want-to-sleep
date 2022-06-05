@@ -69,6 +69,7 @@ export default {
       res.status(204).send();
     }
   ),
+  
   put: asyncHandler(
     async (req: Request<{ ballotID: string }, {}, UpdateBallot>, res) => {
       Joi.assert(req.params, ballotIdSchema);

@@ -13,13 +13,11 @@ export interface TotalVoteCount {
 }
 
 export class VoteService {
+  getVotesForBallot = VoteRepository.getVotesForBallot;
+
   public async saveVote(ballotID: string, token: string, vote: string) {
     await VoteRepository.addVote(ballotID, vote, new Date());
     await BallotRepository.setTokenAsUsed(ballotID, token);
-  }
-
-  public async getVotesForBallot(ballotID: string): Promise<Vote[]> {
-    return await VoteRepository.getVotesForBallot(ballotID);
   }
 
   public async checkIfAlreadyVoted(
