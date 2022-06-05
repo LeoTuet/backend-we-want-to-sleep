@@ -1,4 +1,4 @@
-import { NotFound, UnprocessableEntity } from "http-errors";
+import { NotFound, UnprocessableEntity, Conflict } from "http-errors";
 import { Ballot, VotingOption } from "../repositories/schemas";
 import { BallotService } from "../services/BallotService";
 import { AdminService } from "../services/AdminService";
@@ -43,6 +43,9 @@ export class BallotHandler {
     if (!(await ballotService.checkIfBallotIDExists(ballotID)))
       throw new NotFound("Ballot with given id does not exist");
 
+    if (await ballotService.checkIfBallotRunning(ballotID))
+      throw new Conflict("Ballot is running and therefore it can't be deleted");
+
     await ballotService.deleteBallot(ballotID);
   }
 
@@ -64,6 +67,11 @@ export class BallotHandler {
     if (options.length < 2)
       throw new UnprocessableEntity("Not enough vote options");
 
-    return await ballotService.updateBallot(ballotID, running, question, options);
+    return await ballotService.updateBallot(
+      ballotID,
+      running,
+      question,
+      options
+    );
   }
 }
