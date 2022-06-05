@@ -54,11 +54,13 @@ export default {
     }
   ),
 
-  delete: asyncHandler(async (req: Request<{}, {}, { id: string }>, res) => {
-    Joi.assert(req.params, ballotIdSchema);
-    await ballotHandler.deleteBallot(req.body.id);
-    res.status(204).send();
-  }),
+  delete: asyncHandler(
+    async (req: Request<{ ballotID: string }, {}, {}>, res) => {
+      Joi.assert(req.params, ballotIdSchema);
+      await ballotHandler.deleteBallot(req.params.ballotID);
+      res.status(204).send();
+    }
+  ),
   put: asyncHandler(
     async (req: Request<{ ballotID: string }, {}, UpdateBallot>, res) => {
       Joi.assert(req.params, ballotIdSchema);
