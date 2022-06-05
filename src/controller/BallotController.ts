@@ -12,7 +12,7 @@ type CreationBallot = Omit<Ballot, "_id">;
 
 type UpdateBallot = Omit<CreationBallot, "createdBy">;
 
-const createBallotSchema = Joi.object().keys({
+const creationBallotKeys = {
   running: Joi.boolean().required().strict(),
   question: Joi.string().required(),
   options: Joi.array()
@@ -23,7 +23,15 @@ const createBallotSchema = Joi.object().keys({
         label: Joi.string().required(),
       })
     ),
-});
+};
+
+const updateBallotKeys = {
+  ...creationBallotKeys,
+  _id: Joi.string().length(24).required(),
+};
+
+const createBallotSchema = Joi.object().keys(creationBallotKeys);
+const updateBallotSchema = Joi.object().keys(updateBallotKeys);
 
 const ballotIdSchema = Joi.object().keys({
   ballotID: Joi.string().length(24).required(),
@@ -64,7 +72,7 @@ export default {
   put: asyncHandler(
     async (req: Request<{ ballotID: string }, {}, UpdateBallot>, res) => {
       Joi.assert(req.params, ballotIdSchema);
-      Joi.assert(req.body, createBallotSchema);
+      Joi.assert(req.body, updateBallotSchema);
       const ballot = await ballotHandler.updateBallot(
         req.params.ballotID,
         req.body.running,
