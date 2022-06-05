@@ -1,3 +1,4 @@
+import { Ballot } from './../repositories/schemas';
 import BallotRepository from "../repositories/BallotRepository";
 import { VotingOption } from "../repositories/schemas";
 
@@ -15,7 +16,7 @@ export class BallotService {
     createdBy: string,
     question: string,
     options: VotingOption[]
-  ) {
+  ): Promise<Ballot> {
     if (running) {
       const runningBallot = await this.getRunningBallot();
       if (runningBallot != null) {
@@ -23,7 +24,7 @@ export class BallotService {
         await BallotRepository.updateBallotRunning(runningBallotId, false);
       }
     }
-    await BallotRepository.addBallot(running, createdBy, question, options);
+    return await BallotRepository.addBallot(running, createdBy, question, options);
   }
 
   async updateBallot(
@@ -31,7 +32,7 @@ export class BallotService {
     running: boolean,
     question: string,
     options: VotingOption[]
-  ) {
+  ): Promise<Ballot> {
     if (running) {
       const runningBallot = await this.getRunningBallot();
       if (runningBallot != null) {
@@ -40,7 +41,7 @@ export class BallotService {
           await BallotRepository.updateBallotRunning(runningBallotId, false);
       }
     }
-    await BallotRepository.updateBallot(ballotID, running, question, options);
+    return await BallotRepository.updateBallot(ballotID, running, question, options);
   }
 
   async checkIfBallotRunning(ballotID: string): Promise<boolean> {
