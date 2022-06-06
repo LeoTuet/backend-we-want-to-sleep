@@ -28,7 +28,7 @@ export class BallotHandler {
     createdBy: string,
     question: string,
     options: VotingOption[]
-  ): Promise<Ballot> {
+  ): Promise<BallotInfo> {
     if (options.length < 2)
       throw new UnprocessableEntity("Not enough vote options");
     if (!(await adminService.checkIfUsernameExists(createdBy)))
@@ -36,7 +36,13 @@ export class BallotHandler {
         "There is no admin with the given username"
       );
 
-    return await ballotService.addBallot(running, createdBy, question, options);
+    const ballot = await ballotService.addBallot(
+      running,
+      createdBy,
+      question,
+      options
+    );
+    return convertBallot(ballot);
   }
 
   public async deleteBallot(ballotID: string): Promise<void> {
@@ -61,17 +67,18 @@ export class BallotHandler {
     running: boolean,
     question: string,
     options: VotingOption[]
-  ): Promise<Ballot> {
+  ): Promise<BallotInfo> {
     if (!(await ballotService.checkIfBallotIDExists(ballotID)))
       throw new NotFound("Ballot with given id does not exist");
     if (options.length < 2)
       throw new UnprocessableEntity("Not enough vote options");
 
-    return await ballotService.updateBallot(
+    const ballot = await ballotService.updateBallot(
       ballotID,
       running,
       question,
       options
     );
+    return convertBallot(ballot);
   }
 }

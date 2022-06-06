@@ -49,7 +49,8 @@ async function updateBallot(
         question,
         options,
       },
-    }
+    },
+    { returnDocument: "after" }
   );
 
   if (!result.ok) throw Error("Ballot could not be updated");
