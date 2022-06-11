@@ -8,9 +8,9 @@ import { VoteHandler } from "../handler/VoteHandler";
 const ballotHandler = new BallotHandler();
 const voteHandler = new VoteHandler();
 
-type CreationBallot = Omit<Ballot, "_id">;
+type CreationBallot = Omit<Ballot, "_id" | "tokensUsed" | "createdBy">;
 
-type UpdateBallot = Omit<CreationBallot, "createdBy">;
+type UpdateBallot = CreationBallot;
 
 const creationBallotKeys = {
   running: Joi.boolean().required().strict(),
@@ -69,6 +69,7 @@ export default {
       res.status(204).send();
     }
   ),
+  
   put: asyncHandler(
     async (req: Request<{ ballotID: string }, {}, UpdateBallot>, res) => {
       Joi.assert(req.params, ballotIdSchema);

@@ -1,7 +1,6 @@
 import { Vote } from "../repositories/schemas";
 import BallotRepository from "../repositories/BallotRepository";
 import VoteRepository from "../repositories/VoteRepository";
-import { ObjectId } from "mongodb";
 
 export interface VoteResult {
   questionIdentifier: string;
@@ -14,25 +13,18 @@ export interface TotalVoteCount {
 }
 
 export class VoteService {
+  getVotesForBallot = VoteRepository.getVotesForBallot;
+
   public async saveVote(ballotID: string, token: string, vote: string) {
-    const ballot = await BallotRepository.getBallot(ballotID);
-    await VoteRepository.addVote(token, ballot._id, vote, new Date());
-  }
-
-  public async getVote(ballotID: string, token: string): Promise<Vote> {
-    return await VoteRepository.getVote(token, new ObjectId(ballotID));
-  }
-
-  public async getVotes(ballotID: string): Promise<Vote[]> {
-    return await VoteRepository.getVotes(new ObjectId(ballotID));
+    await VoteRepository.addVote(ballotID, vote, new Date());
+    await BallotRepository.setTokenAsUsed(ballotID, token);
   }
 
   public async checkIfAlreadyVoted(
     ballotID: string,
     token: string
   ): Promise<boolean> {
-    const vote = await this.getVote(ballotID, token);
-    return vote != null;
+    return BallotRepository.checkIfTokenIsUsed(ballotID, token);
   }
 
   public async checkIfVoteOptionValid(
@@ -43,15 +35,15 @@ export class VoteService {
     return ballot.options.map((option) => option.identifier).includes(vote);
   }
 
-  public async countVotes(ballotID: string): Promise<TotalVoteCount> {
-    const votes = await this.getVotes(ballotID);
+  public async countVotesForBallot(ballotID: string): Promise<TotalVoteCount> {
+    const votes = await this.getVotesForBallot(ballotID);
     return {
       count: votes.length,
     };
   }
 
   public async getVoteResult(ballotID: string): Promise<VoteResult[]> {
-    const votes = await this.getVotes(ballotID);
+    const votes = await this.getVotesForBallot(ballotID);
     const ballot = await BallotRepository.getBallot(ballotID);
     const voteOptions = ballot.options;
 

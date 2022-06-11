@@ -45,20 +45,10 @@ export class VoteHandler {
     await voteService.saveVote(ballotID, token, vote);
   }
 
-  public async getVote(token: string, ballotID: string): Promise<Vote> {
-    if (!(await tokenService.checkIfTokenExists(token)))
-      throw new Unauthorized("Invalid vote token");
-    if (!(await ballotService.checkIfBallotIDExists(ballotID)))
-      throw new NotFound("Ballot with given id does not exist");
-    if (!(await voteService.checkIfAlreadyVoted(ballotID, token)))
-      throw new NotFound("Not voted yet");
-    return await voteService.getVote(ballotID, token);
-  }
-
   public async getVotes(ballotID: string): Promise<Vote[]> {
     if (!(await ballotService.checkIfBallotIDExists(ballotID)))
       throw new NotFound("Ballot with given id does not exist");
-    return await voteService.getVotes(ballotID);
+    return await voteService.getVotesForBallot(ballotID);
   }
 
   public async getVoteResult(ballotID: string): Promise<VoteResult[]> {
@@ -70,6 +60,6 @@ export class VoteHandler {
   public async getTotalVoteCount(ballotID: string): Promise<TotalVoteCount> {
     if (!(await ballotService.checkIfBallotIDExists(ballotID)))
       throw new NotFound("Ballot with given id does not exist");
-    return await voteService.countVotes(ballotID);
+    return await voteService.countVotesForBallot(ballotID);
   }
 }

@@ -49,16 +49,4 @@ export default {
       });
     }
   ),
-
-  getByToken: asyncHandler(
-    async (req: Request<{ ballotID: string; token: string }, {}, {}>, res) => {
-      Joi.assert(req.params, voteGetParamsSchema);
-
-      const { _id, token, ...vote } = await voteHandler.getVote(
-        req.params.token,
-        req.params.ballotID
-      );
-      res.json({ data: vote });
-    }
-  ),
 };

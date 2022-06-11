@@ -19,7 +19,6 @@ const baseRouter = Router();
 const voteRouter = Router();
 baseRouter.use("/vote", voteRouter);
 voteRouter.get("/:ballotID", isAdmin, VoteController.listByBallot);
-voteRouter.get("/:ballotID/:token", VoteController.getByToken);
 voteRouter.post("/:ballotID", isCaptchaValid, VoteController.add);
 
 const ballotRouter = Router();

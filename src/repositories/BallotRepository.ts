@@ -65,11 +65,53 @@ async function deleteBallot(ballotID: string): Promise<void> {
   if (result.deletedCount !== 1) throw Error("Ballot could not be deleted");
 }
 
+async function updateBallotRunning(
+  ballotID: string,
+  running: boolean
+): Promise<void> {
+  const result = await getCollection("ballot").updateOne(
+    { _id: new ObjectId(ballotID) },
+    {
+      $set: {
+        running,
+      },
+    }
+  );
+
+  if (!result.acknowledged) throw Error("Ballot could not be updated");
+}
+
+async function setTokenAsUsed(ballotId: string, token: string): Promise<void> {
+  const result = await getCollection("ballot").updateOne(
+    { _id: new ObjectId(ballotId) },
+    {
+      $push: {
+        tokensUsed: token,
+      },
+    }
+  );
+
+  if (!result.acknowledged) throw Error("Token could not be set as used");
+}
+
+async function checkIfTokenIsUsed(
+  ballotId: string,
+  token: string
+): Promise<boolean> {
+  return await getCollection("ballot").findOne({
+    _id: new ObjectId(ballotId),
+    tokensUsed: { $elemMatch: { $eq: token } },
+  });
+}
+
 export default {
   getBallot,
   getBallots,
   getRunningBallot,
   addBallot,
   updateBallot,
+  updateBallotRunning,
   deleteBallot,
+  setTokenAsUsed,
+  checkIfTokenIsUsed,
 };
