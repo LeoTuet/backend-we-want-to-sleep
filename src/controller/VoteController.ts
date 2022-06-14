@@ -1,7 +1,7 @@
 import { Request } from "express";
 import Joi from "joi";
 import { VoteHandler } from "../handler/VoteHandler";
-import { asyncHandler } from "../utils/AsyncHandler";
+import asyncHandler from "express-async-handler";
 
 const voteHandler = new VoteHandler();
 

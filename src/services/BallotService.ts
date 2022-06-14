@@ -1,4 +1,4 @@
-import { Ballot } from './../repositories/schemas';
+import { Ballot, TranslatableText } from './../repositories/schemas';
 import BallotRepository from "../repositories/BallotRepository";
 import { VotingOption } from "../repositories/schemas";
 
@@ -14,7 +14,7 @@ export class BallotService {
   async addBallot(
     running: boolean,
     createdBy: string,
-    question: string,
+    question: TranslatableText,
     options: VotingOption[]
   ): Promise<Ballot> {
     if (running) {
@@ -30,7 +30,7 @@ export class BallotService {
   async updateBallot(
     ballotID: string,
     running: boolean,
-    question: string,
+    question: TranslatableText,
     options: VotingOption[]
   ): Promise<Ballot> {
     if (running) {

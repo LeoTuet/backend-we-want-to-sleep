@@ -1,4 +1,4 @@
-import { asyncHandler } from "../utils/AsyncHandler";
+import asyncHandler from "express-async-handler";
 import { NextFunction, Request } from "express";
 import { CaptchaHandler } from "../handler/CaptchaHandler";
 

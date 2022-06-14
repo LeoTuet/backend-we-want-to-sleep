@@ -1,6 +1,6 @@
 import { Request } from "express";
 import Joi from "joi";
-import { asyncHandler } from "../utils/AsyncHandler";
+import asyncHandler from "express-async-handler";
 import { ApiKeyHandler } from "../handler/ApiKeyHandler";
 
 const apiKeyHandler = new ApiKeyHandler();

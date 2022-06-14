@@ -5,11 +5,14 @@ export interface Vote {
   votedAt: Date;
 }
 
+/** A object with keys as language identifier and values as text in the corresponding language */
+export type TranslatableText = Record<string, string>;
+
 export interface Ballot {
   _id: string;
   createdBy: string;
   running: boolean;
-  question: string;
+  question: TranslatableText;
   options: VotingOption[];
   tokensUsed: string[];
 }
@@ -24,7 +27,7 @@ export interface Token {
 
 export interface VotingOption {
   identifier: string;
-  label: string;
+  label: TranslatableText;
 }
 
 export interface Admin {
