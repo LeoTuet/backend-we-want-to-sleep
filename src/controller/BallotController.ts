@@ -33,7 +33,7 @@ const creationBallotKeys = {
 
 const updateBallotKeys = {
   ...creationBallotKeys,
-  _id: Joi.string().length(24).required(),
+  _id: Joi.string().length(24),
 };
 
 const createBallotSchema = Joi.object().keys(creationBallotKeys);
