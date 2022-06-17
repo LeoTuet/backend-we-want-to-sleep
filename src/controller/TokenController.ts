@@ -1,6 +1,6 @@
 import { Request } from "express";
 import Joi from "joi";
-import { asyncHandler } from "../utils/AsyncHandler";
+import asyncHandler from "express-async-handler";
 import { TokenHandler } from "../handler/TokenHandler";
 
 const tokenHandler = new TokenHandler();
@@ -32,13 +32,7 @@ export default {
   ),
   generate: asyncHandler(
     async (
-      req: Request<
-        {},
-        {},
-        { amount: number; valid: boolean },
-        {},
-        { username: string }
-      >,
+      req: Request<{}, {}, { amount: number; valid: boolean }, {}>,
       res
     ) => {
       Joi.assert(req.body, tokenGenerationSchema);

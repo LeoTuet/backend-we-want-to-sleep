@@ -1,5 +1,5 @@
 import { NotFound, UnprocessableEntity, Conflict } from "http-errors";
-import { Ballot, VotingOption } from "../repositories/schemas";
+import { Ballot, TranslatableText, VotingOption } from "../repositories/schemas";
 import { BallotService } from "../services/BallotService";
 import { AdminService } from "../services/AdminService";
 
@@ -27,7 +27,7 @@ export class BallotHandler {
   public async addBallot(
     running: boolean,
     createdBy: string,
-    question: string,
+    question: TranslatableText,
     options: VotingOption[]
   ): Promise<BallotInfo> {
     if (options.length < 2)
@@ -66,7 +66,7 @@ export class BallotHandler {
   public async updateBallot(
     ballotID: string,
     running: boolean,
-    question: string,
+    question: TranslatableText,
     options: VotingOption[]
   ): Promise<BallotInfo> {
     if (!(await ballotService.checkIfBallotIDExists(ballotID)))

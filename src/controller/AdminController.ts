@@ -1,6 +1,6 @@
 import { Request } from "express";
 import Joi from "joi";
-import { asyncHandler } from "../utils/AsyncHandler";
+import asyncHandler from "express-async-handler";
 import { AdminHandler } from "../handler/AdminHandler";
 
 const adminHandler = new AdminHandler();

@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { asyncHandler } from "../utils/AsyncHandler";
+import asyncHandler from "express-async-handler";
 import { BallotHandler } from "../handler/BallotHandler";
 import { Ballot } from "../repositories/schemas";
 import Joi from "joi";
@@ -12,22 +12,28 @@ type CreationBallot = Omit<Ballot, "_id" | "tokensUsed" | "createdBy">;
 
 type UpdateBallot = CreationBallot;
 
+// .patter to allow any key with value of type string
+const translatableTextSchema = Joi.object({
+  de: Joi.string().required(),
+  en: Joi.string().required(),
+}).pattern(/./, Joi.string());
+
 const creationBallotKeys = {
   running: Joi.boolean().required().strict(),
-  question: Joi.string().required(),
+  question: translatableTextSchema.required(),
   options: Joi.array()
     .min(2)
     .items(
       Joi.object().keys({
         identifier: Joi.string().required(),
-        label: Joi.string().required(),
+        label: translatableTextSchema.required(),
       })
     ),
 };
 
 const updateBallotKeys = {
   ...creationBallotKeys,
-  _id: Joi.string().length(24).required(),
+  _id: Joi.string().length(24),
 };
 
 const createBallotSchema = Joi.object().keys(creationBallotKeys);
@@ -48,7 +54,7 @@ export default {
 
   add: asyncHandler(
     async (
-      req: Request<{}, {}, CreationBallot, {}, { username: string }>,
+      req: Request<{}, {}, CreationBallot, {}>,
       res
     ) => {
       Joi.assert(req.body, createBallotSchema);
@@ -69,7 +75,7 @@ export default {
       res.status(204).send();
     }
   ),
-  
+
   put: asyncHandler(
     async (req: Request<{ ballotID: string }, {}, UpdateBallot>, res) => {
       Joi.assert(req.params, ballotIdSchema);

@@ -1,10 +1,10 @@
-import { Vote } from "../repositories/schemas";
+import { TranslatableText } from "../repositories/schemas";
 import BallotRepository from "../repositories/BallotRepository";
 import VoteRepository from "../repositories/VoteRepository";
 
 export interface VoteResult {
   questionIdentifier: string;
-  questionLabel: string;
+  questionLabel: TranslatableText;
   amount: number;
 }
 

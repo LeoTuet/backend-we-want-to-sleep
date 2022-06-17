@@ -1,5 +1,5 @@
 import { getCollection } from "./connectToDB";
-import { Ballot, VotingOption } from "./schemas";
+import { Ballot, TranslatableText, VotingOption } from "./schemas";
 import { ObjectId } from "mongodb";
 
 async function getBallot(ballotID: string): Promise<Ballot> {
@@ -21,7 +21,7 @@ async function getRunningBallot(): Promise<Ballot> {
 async function addBallot(
   running: boolean,
   createdBy: string,
-  question: string,
+  question: TranslatableText,
   options: VotingOption[]
 ): Promise<Ballot> {
   const result = await getCollection("ballot").insertOne({
@@ -38,7 +38,7 @@ async function addBallot(
 async function updateBallot(
   ballotID: string,
   running: boolean,
-  question: string,
+  question: TranslatableText,
   options: VotingOption[]
 ): Promise<Ballot> {
   const result = await getCollection("ballot").findOneAndUpdate(
