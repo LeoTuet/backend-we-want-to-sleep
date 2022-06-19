@@ -27,7 +27,10 @@ ballotRouter.get("/", BallotController.list);
 ballotRouter.get("/running", BallotController.listRunning);
 ballotRouter.get("/status/:ballotID", BallotController.getTotalVoteCount);
 
-ballotRouter.get("/result/:ballotID", isAdmin, BallotController.getVoteResult);
+ballotRouter.get(
+  "/result/:ballotID",
+  /* isAdmin,*/ BallotController.getVoteResult
+);
 ballotRouter.post("/", isAdmin, BallotController.add);
 ballotRouter.put("/:ballotID", isAdmin, BallotController.put);
 ballotRouter.delete("/:ballotID", isAdmin, BallotController.delete);
