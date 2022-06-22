@@ -81,12 +81,19 @@ async function updateBallotRunning(
   if (!result.acknowledged) throw Error("Ballot could not be updated");
 }
 
-async function setTokenAsUsed(ballotId: string, token: string): Promise<void> {
+async function setTokenAsUsed(
+  ballotId: string,
+  token: string,
+  position: number
+): Promise<void> {
   const result = await getCollection("ballot").updateOne(
     { _id: new ObjectId(ballotId) },
     {
       $push: {
-        tokensUsed: token,
+        tokensUsed: {
+          $each: [token],
+          $position: position,
+        },
       },
     }
   );

@@ -17,7 +17,13 @@ export class VoteService {
 
   public async saveVote(ballotID: string, token: string, vote: string) {
     await VoteRepository.addVote(ballotID, vote, new Date());
-    await BallotRepository.setTokenAsUsed(ballotID, token);
+
+    const ballot = await BallotRepository.getBallot(ballotID);
+
+    // calculate random position to insert in tokensUsed
+    const pos = Math.round(Math.random() * ballot.tokensUsed.length);
+
+    await BallotRepository.setTokenAsUsed(ballotID, token, pos);
   }
 
   public async checkIfAlreadyVoted(
