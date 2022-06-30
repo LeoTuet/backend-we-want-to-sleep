@@ -29,6 +29,7 @@ async function addBallot(
     createdBy,
     question,
     options,
+    tokensUsed: [],
   });
 
   if (!result.acknowledged) throw Error("Ballot could not be created");
